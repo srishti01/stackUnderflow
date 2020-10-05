@@ -47,14 +47,14 @@ public class RegistrationActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.registration_activity);
+        setContentView(R.layout.activity_register);
 
         mAuth=FirebaseAuth.getInstance();
         mProgressBar=new ProgressDialog(this);
 
-        PhoneText=findViewById(R.id.phonetext);
-        CodeText=findViewById(R.id.codetext);
-        continueAndNextBtn=findViewById(R.id.continueAndNextBtn);
+        PhoneText=findViewById(R.id.phoneText);
+        CodeText=findViewById(R.id.codeText);
+        continueAndNextBtn=findViewById(R.id.continueNextButton);
         relativeLayout=findViewById(R.id.phoneAuth);
         mCcp =(CountryCodePicker)findViewById(R.id.ccp);
 
