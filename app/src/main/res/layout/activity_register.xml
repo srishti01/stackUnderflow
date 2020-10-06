@@ -76,7 +76,6 @@
         android:layout_marginRight="25dp"
         android:layout_marginBottom="25dp"
         android:backgroundTint="@android:color/white"
-        android:drawableLeft="@drawable/lock"
         android:drawableTint="@android:color/white"
         android:hint="Write you code here..."
         android:inputType="phone"

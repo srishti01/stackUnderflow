@@ -97,6 +97,22 @@ public class RegistrationActivity extends AppCompatActivity {
                     else {
                         Toast.makeText(RegistrationActivity.this,"Invalid Phone Number",Toast.LENGTH_SHORT).show();
                     }
+                        PhoneNumber=mCcp.getFullNumberWithPlus();
+                        if(PhoneNumber!=null)        //(!PhoneNumber.equals("")
+                        {
+                             mProgressBar.setTitle("Phone Number Verification");
+                             mProgressBar.setMessage("Please Wait");
+                             mProgressBar.setCanceledOnTouchOutside(false);
+                             mProgressBar.show();
+
+                            PhoneAuthProvider.getInstance().verifyPhoneNumber(PhoneNumber, 60,
+                                    TimeUnit.SECONDS,
+                                   RegistrationActivity.this,
+                                    mCallbacks);
+                        }
+                        else {
+                            Toast.makeText(RegistrationActivity.this,"Invalid Phone Number",Toast.LENGTH_SHORT).show();
+                        }
                 }
             }
         });
@@ -153,3 +169,5 @@ public class RegistrationActivity extends AppCompatActivity {
                 });
     }
 }
+
+
