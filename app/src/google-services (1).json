@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "39568133756",
+    "firebase_url": "https://stackunderflow-77a50.firebaseio.com",
+    "project_id": "stackunderflow-77a50",
+    "storage_bucket": "stackunderflow-77a50.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:39568133756:android:640cf9c78602d92be703f9",
+        "android_client_info": {
+          "package_name": "com.example.stackunderflow"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "39568133756-6n9gi9p195hlt5otq5hdj911uqln5j87.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrB_7IS86Egn-wLa8WxwGoXbiMVc5sBeA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "39568133756-6n9gi9p195hlt5otq5hdj911uqln5j87.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
