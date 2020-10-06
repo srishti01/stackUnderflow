@@ -19,7 +19,7 @@
             android:layout_height="220dp"
             android:scaleType="centerCrop"
             android:layout_centerHorizontal="true"
-            android:src="@drawable/profile_image"
+
             android:id="@+id/image_contact"
             android:layout_marginTop="16dp"/>
 
@@ -40,15 +40,14 @@
             android:layout_height="40dp"
             android:id="@+id/call_btn"
             android:layout_marginTop="8dp"
-           android:layout_marginLeft="80dp"
+            android:layout_marginLeft="80dp"
             android:layout_marginRight="80dp"
             android:layout_marginBottom="12dp"
             android:layout_centerHorizontal="true"
-            android:drawableTop="@drawable/ic_vidio_call2"
             android:background="@color/colorAccent"
             android:drawableTint="#000000"
             android:padding="6dp"
-             android:gravity="center"
+            android:gravity="center"
             android:layout_below="@+id/name_contact"/>
 
 
@@ -57,4 +56,6 @@
 
     </RelativeLayout>
 
+
 </androidx.cardview.widget.CardView>
+

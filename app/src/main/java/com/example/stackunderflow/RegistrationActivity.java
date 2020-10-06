@@ -81,7 +81,9 @@ public class RegistrationActivity extends AppCompatActivity {
                     }
                 }
                 else {
+
                         PhoneNumber=mCcp.getFullNumberWithPlus();       //to get phone number with ccp
+
                         if(PhoneNumber!=null)        //(!PhoneNumber.equals("")
                         {
                              mProgressBar.setTitle("Phone Number Verification");        //enable the progressbar
@@ -104,7 +106,9 @@ public class RegistrationActivity extends AppCompatActivity {
         mCallbacks=new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             @Override
             public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
-                   signInWithPhoneAuthCredential(phoneAuthCredential);     //method is called
+
+                signInWithPhoneAuthCredential(phoneAuthCredential);
+
             }
 
             @Override

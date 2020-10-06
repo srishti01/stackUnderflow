@@ -46,33 +46,33 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()){
-                case R.id.navigation_home:{
+            switch (item.getItemId()) {
+                case R.id.navigation_home: {
                     //As we are originally in the main activity so the Intent will just Refresh the mainActivity
-                    Intent mainIntent = new Intent(MainActivity.this,MainActivity.class);
+                    Intent mainIntent = new Intent(MainActivity.this, MainActivity.class);
                     startActivity(mainIntent);
                     break;
                 }
-                case R.id.navigation_settings:{
+                case R.id.navigation_dashboard: {
                     //Setting Intent to show what would happen when notification icon is pressed
-                    Intent settingsIntent = new Intent(MainActivity.this,SettingsActivity.class);
+                    Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
                     startActivity(settingsIntent);
                     break;
                 }
-                case R.id.navigation_notifications:{
-                    Intent notificationIntent = new Intent(MainActivity.this,NotificationActivity.class);
+                case R.id.navigation_notifications: {
+                    Intent notificationIntent = new Intent(MainActivity.this, NotificationActivity.class);
                     startActivity(notificationIntent);
                     break;
                 }
-//                case R.id.navigation_logout:{
+//              case R.id.navigation_logout:{
 //                    Intent logoutIntent = new Intent(MainActivity.this,RegistrationActivity.class);//Registration activity will be given by ss
 //                    startActivity(logoutIntent);
 //                    finish();
 //                    break;
-//                }
+//              }
             }
             return true;
         }
     };
-
 }
+
