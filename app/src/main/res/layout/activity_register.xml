@@ -84,6 +84,7 @@
         android:textColorHint="@android:color/tertiary_text_dark"
         android:visibility="gone" />
 
+
     <Button
         android:id="@+id/continueNextButton"
         android:layout_width="wrap_content"

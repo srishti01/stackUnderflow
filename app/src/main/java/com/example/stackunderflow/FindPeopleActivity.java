@@ -5,6 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+
+import android.content.Context;
+
 import android.os.Bundle;
 import android.view.View;
 import android.content.Intent;
@@ -25,9 +28,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
+
 public class FindPeopleActivity extends AppCompatActivity {
 
     private RecyclerView findPeopleList;
+
     private EditText searchET;
     private String str="";
     private DatabaseReference usersRef;
@@ -36,6 +41,7 @@ public class FindPeopleActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_people);
+
 
         searchET = findViewById(R.id.search_user_text);         //receives the name to search
         findPeopleList = findViewById(R.id.find_people_list);

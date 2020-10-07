@@ -3,6 +3,8 @@ package com.example.stackunderflow;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -12,9 +14,14 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class MainActivity extends AppCompatActivity {
     BottomNavigationView navView;
+
+    RecyclerView contactList;     //to show contact list when find_people button is clicked
+    ImageView findPeopleBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +29,18 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main2);
         navView = findViewById(R.id.nav_view);
         navView.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
+
+        contactList=findViewById(R.id.contact_list);
+        findPeopleBtn=findViewById(R.id.find_people_btn);
+        contactList.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+
+        findPeopleBtn.setOnClickListener(new View.OnClickListener() {            //to show contact list when find_people button is clicked
+            @Override
+            public void onClick(View view) {
+                Intent findPeople = new Intent(MainActivity.this,FindPeopleActivity.class);
+                startActivity(findPeople);
+            }
+        });
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
