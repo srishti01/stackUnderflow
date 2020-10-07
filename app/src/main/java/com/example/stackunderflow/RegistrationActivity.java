@@ -81,16 +81,18 @@ public class RegistrationActivity extends AppCompatActivity {
                     }
                 }
                 else {
-                        PhoneNumber=mCcp.getFullNumberWithPlus();
+
+                        PhoneNumber=mCcp.getFullNumberWithPlus();       //to get phone number with ccp
+
                         if(PhoneNumber!=null)        //(!PhoneNumber.equals("")
                         {
-                             mProgressBar.setTitle("Phone Number Verification");
+                             mProgressBar.setTitle("Phone Number Verification");        //enable the progressbar
                              mProgressBar.setMessage("Please Wait");
                              mProgressBar.setCanceledOnTouchOutside(false);
                              mProgressBar.show();
 
                             PhoneAuthProvider.getInstance().verifyPhoneNumber(PhoneNumber, 60,
-                                    TimeUnit.SECONDS,
+                                    TimeUnit.SECONDS,                   //phone number authentication code
                                    RegistrationActivity.this,
                                     mCallbacks);
                         }
@@ -104,7 +106,9 @@ public class RegistrationActivity extends AppCompatActivity {
         mCallbacks=new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             @Override
             public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
-                   signInWithPhoneAuthCredential(phoneAuthCredential);
+
+                signInWithPhoneAuthCredential(phoneAuthCredential);
+
             }
 
             @Override
@@ -121,8 +125,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 super.onCodeSent(s, forceResendingToken);
 
                 mResendToken=forceResendingToken;
-                mVerificationID=s;
-
+                mVerificationID=s;                                //to get verification code in other phone
                 relativeLayout.setVisibility(View.GONE);
                 checker="Code Sent";
                 continueAndNextBtn.setText("Submit");
