@@ -63,9 +63,9 @@ public class RegistrationActivity extends AppCompatActivity {
         continueAndNextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(continueAndNextBtn.getText().equals("Submit")|| checker.equals("Code Sent"))
+                if(continueAndNextBtn.getText().equals("Submit")|| checker.equals("Code Sent"))    //when the text on button changes to submit we will verify the code
                 {
-                    String VerificationCode=CodeText.getText().toString();
+                    String VerificationCode=CodeText.getText().toString();  //code verification
                     if(VerificationCode!=null)
                     {
                         mProgressBar.setTitle("Code Verification");
@@ -92,7 +92,7 @@ public class RegistrationActivity extends AppCompatActivity {
                              mProgressBar.show();
 
                             PhoneAuthProvider.getInstance().verifyPhoneNumber(PhoneNumber, 60,
-                                    TimeUnit.SECONDS,                   //phone number authentication code
+                                    TimeUnit.SECONDS,                   //phone number authentication code from firebase
                                    RegistrationActivity.this,
                                     mCallbacks);
                         }
@@ -107,12 +107,12 @@ public class RegistrationActivity extends AppCompatActivity {
             @Override
             public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
 
-                signInWithPhoneAuthCredential(phoneAuthCredential);
+                signInWithPhoneAuthCredential(phoneAuthCredential);     ///when code if verified we call this method
 
             }
 
             @Override
-            public void onVerificationFailed(@NonNull FirebaseException e) {
+            public void onVerificationFailed(@NonNull FirebaseException e) {    //if verification fails we set code to gone and text on btn to continue
                 Toast.makeText(RegistrationActivity.this,"Verification Unsuccessful!",Toast.LENGTH_SHORT).show();
                 mProgressBar.dismiss();
                 relativeLayout.setVisibility(View.VISIBLE);
@@ -141,14 +141,14 @@ public class RegistrationActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
+                            // Sign in success, update UI with the signed-in user's information and send user to main activity
                             mProgressBar.dismiss();
                             Toast.makeText(RegistrationActivity.this,"Sign in Successful!",Toast.LENGTH_SHORT).show();
                             Intent intent=new Intent(RegistrationActivity.this,MainActivity.class);
                             startActivity(intent);
 
                         } else {
-                            // Sign in failed, display a message and update the UI
+                            // Sign in failed, display a message and update the UI and make a toast msg
                             mProgressBar.dismiss();
                             Toast.makeText(RegistrationActivity.this,"Error! Sign in Unsuccessful!",Toast.LENGTH_SHORT).show();
                         }
