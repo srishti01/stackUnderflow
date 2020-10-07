@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,20 +31,21 @@ public class MainActivity extends AppCompatActivity {
         navView = findViewById(R.id.nav_view);
         navView.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
 
-        contactList=findViewById(R.id.contact_list);
-        findPeopleBtn=findViewById(R.id.find_people_btn);
+        contactList = findViewById(R.id.contact_list);
+        findPeopleBtn = findViewById(R.id.find_people_btn);
         contactList.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
         findPeopleBtn.setOnClickListener(new View.OnClickListener() {            //to show contact list when find_people button is clicked
             @Override
             public void onClick(View view) {
-                Intent findPeople = new Intent(MainActivity.this,FindPeopleActivity.class);
+                Intent findPeople = new Intent(MainActivity.this, FindPeopleActivity.class);
                 startActivity(findPeople);
             }
         });
     }
 
-    private BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
+    private BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener =
+            new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
@@ -64,12 +66,14 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(notificationIntent);
                     break;
                 }
-//              case R.id.navigation_logout:{
-//                    Intent logoutIntent = new Intent(MainActivity.this,RegistrationActivity.class);//Registration activity will be given by ss
-//                    startActivity(logoutIntent);
-//                    finish();
-//                    break;
-//              }
+              case R.id.navigation_logout:{
+                  FirebaseAuth.getInstance().signOut();
+
+                    Intent logoutIntent = new Intent(MainActivity.this,RegistrationActivity.class);
+                    startActivity(logoutIntent);
+                    finish();
+                    break;
+              }
             }
             return true;
         }

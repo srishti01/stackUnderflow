@@ -127,7 +127,7 @@ public class FindPeopleActivity extends AppCompatActivity {
             }
         };
         findPeopleList.setAdapter(firebaseRecyclerAdapter);
-        firebaseRecyclerAdapter.startListening(); //this will enable displaying the suggested users whenever we change text in searchbar
+        firebaseRecyclerAdapter.startListening(); //this will enable displaying the suggested users whenever we change text in search bar
     }
 
     public static class FindFriendsViewHolder extends RecyclerView.ViewHolder
