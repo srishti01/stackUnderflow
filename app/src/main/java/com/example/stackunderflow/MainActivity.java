@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -70,6 +71,14 @@ public class MainActivity extends AppCompatActivity {
 //                    finish();
 //                    break;
 //              }
+                case R.id.navigation_logout:{
+                    FirebaseAuth.getInstance().signOut();
+
+                    Intent logoutIntent = new Intent(MainActivity.this,RegistrationActivity.class);
+                    startActivity(logoutIntent);
+                    finish();
+                    break;
+                }
             }
             return true;
         }

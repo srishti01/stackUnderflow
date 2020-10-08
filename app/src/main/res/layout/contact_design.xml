@@ -19,7 +19,7 @@
             android:layout_height="220dp"
             android:scaleType="centerCrop"
             android:layout_centerHorizontal="true"
-
+           android:src="@drawable/profile_image"
             android:id="@+id/image_contact"
             android:layout_marginTop="16dp"/>
 
@@ -48,6 +48,7 @@
             android:drawableTint="#000000"
             android:padding="6dp"
             android:gravity="center"
+            android:drawableTop="@drawable/ic_vidio_call2"
             android:layout_below="@+id/name_contact"/>
 
 

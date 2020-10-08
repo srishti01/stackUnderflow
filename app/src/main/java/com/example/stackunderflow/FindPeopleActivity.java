@@ -49,7 +49,7 @@ public class FindPeopleActivity extends AppCompatActivity {
 
         usersRef = FirebaseDatabase.getInstance().getReference().child("Users");
 
-        searchET.addTextChangedListener(new TextWatcher() {        //inbuilt method to acess and implement functions when text is added in searchbar
+        searchET.addTextChangedListener(new TextWatcher() {        //inbuilt method to access and implement functions when text is added in searchbar
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 

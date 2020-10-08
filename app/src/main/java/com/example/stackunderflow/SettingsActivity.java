@@ -170,8 +170,8 @@ public class SettingsActivity extends AppCompatActivity {
                                 if (task.isSuccessful()) {
                                     //Now if the setting up of name,dp,bio was successful
                                     //we will send the user to the homepage
-//SONAL                                    Intent intent = new Intent(SettingsActivity.this, ContactActivity.class);//ContactActivity will be given by Sonal(5th vid)
-//                                    startActivity(intent);
+                                   Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
+                                   startActivity(intent);
                                     finish();
                                     progressDialog.dismiss();
 
@@ -217,8 +217,8 @@ public class SettingsActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         //Now if the setting up of name,dp,bio was successful
                         //we will send the user to the homepage
-//SONAL                        Intent intent = new Intent(SettingsActivity.this, ContactActivity.class);//ContactActivity will be given by Sonal(5th vid)
-//                        startActivity(intent);
+                       Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
+                        startActivity(intent);
                         finish();
                         progressDialog.dismiss();
 
