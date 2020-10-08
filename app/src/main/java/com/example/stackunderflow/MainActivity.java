@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -24,14 +23,10 @@ import com.squareup.picasso.Picasso;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class ContactsActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
     BottomNavigationView navView;
 
     RecyclerView myContactsList;     //to show contact list when find_people button is clicked
@@ -62,7 +57,7 @@ public class ContactsActivity extends AppCompatActivity {
         findPeopleBtn.setOnClickListener(new View.OnClickListener() {            //to show contact list when find_people button is clicked
             @Override
             public void onClick(View view) {
-                Intent findPeople = new Intent(ContactsActivity.this,FindPeopleActivity.class);
+                Intent findPeople = new Intent(MainActivity.this,FindPeopleActivity.class);
                 startActivity(findPeople);
             }
         });
@@ -74,18 +69,18 @@ public class ContactsActivity extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.navigation_home: {
                     //As we are originally in the main activity so the Intent will just Refresh the mainActivity
-                    Intent mainIntent = new Intent(ContactsActivity.this, ContactsActivity.class);
+                    Intent mainIntent = new Intent(MainActivity.this, MainActivity.class);
                     startActivity(mainIntent);
                     break;
                 }
                 case R.id.navigation_dashboard: {
                     //Setting Intent to show what would happen when notification icon is pressed
-                    Intent settingsIntent = new Intent(ContactsActivity.this, SettingsActivity.class);
+                    Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
                     startActivity(settingsIntent);
                     break;
                 }
                 case R.id.navigation_notifications: {
-                    Intent notificationIntent = new Intent(ContactsActivity.this, NotificationActivity.class);
+                    Intent notificationIntent = new Intent(MainActivity.this, NotificationActivity.class);
                     startActivity(notificationIntent);
                     break;
                 }
@@ -98,7 +93,7 @@ public class ContactsActivity extends AppCompatActivity {
                 case R.id.navigation_logout:{
                     FirebaseAuth.getInstance().signOut();
 
-                    Intent logoutIntent = new Intent(ContactsActivity.this,RegistrationActivity.class);
+                    Intent logoutIntent = new Intent(MainActivity.this,RegistrationActivity.class);
                     startActivity(logoutIntent);
                     finish();
                     break;
