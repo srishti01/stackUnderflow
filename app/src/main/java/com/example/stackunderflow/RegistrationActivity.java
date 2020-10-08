@@ -91,7 +91,7 @@ public class RegistrationActivity extends AppCompatActivity {
                              mProgressBar.setCanceledOnTouchOutside(false);
                              mProgressBar.show();
 
-                            PhoneAuthProvider.getInstance().verifyPhoneNumber(PhoneNumber, 60,
+                            PhoneAuthProvider.getInstance().verifyPhoneNumber(PhoneNumber,60,
                                     TimeUnit.SECONDS,                   //phone number authentication code from firebase
                                    RegistrationActivity.this,
                                     mCallbacks);

@@ -14,12 +14,12 @@
 
         <activity android:name=".ProfileActivity"></activity>
         <activity android:name=".FindPeopleActivity" />
-
+         <activity android:name=".RegistrationActivity"/>
         <activity android:name=".NotificationActivity" />
         <activity android:name=".SettingsActivity" />
         <activity
             android:name=".MainActivity"
-            android:label="@string/title_activity_main">
+            android:label="VideoChat">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
