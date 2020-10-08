@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SettingsActivity">
+
+    <ImageView
+        android:id="@+id/settings_profile_image"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"
+        android:src="@drawable/profile_image"
+        />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/username_settings"
+        android:drawableLeft="@drawable/ic_write_username"
+        android:layout_below="@+id/settings_profile_image"
+        android:layout_marginLeft="16dp"
+        android:hint="Username"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="35dp"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/bio_settings"
+        android:drawableLeft="@drawable/ic_write_bio"
+        android:layout_below="@+id/username_settings"
+        android:layout_marginLeft="16dp"
+        android:hint="Bio"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="35dp"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/bio_settings"
+        android:layout_marginLeft="106dp"
+        android:text="Save"
+        android:id="@+id/save_button"
+        android:layout_marginRight="106dp"
+        android:layout_marginTop="35dp"
+        />
+
+
+</RelativeLayout>
