@@ -85,15 +85,15 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        if(firebaseUser == null){
-            Intent homeIntent = new Intent(MainActivity.this,RegistrationActivity.class);
-            startActivity(homeIntent);
-            finish();
-        }
-    }
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+//        if(firebaseUser == null){
+//            Intent homeIntent = new Intent(MainActivity.this,RegistrationActivity.class);
+//            startActivity(homeIntent);
+//            finish();
+//        }
+//    }
 }
 
