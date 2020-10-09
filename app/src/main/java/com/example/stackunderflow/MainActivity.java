@@ -2,39 +2,60 @@ package com.example.stackunderflow;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 import com.google.firebase.auth.FirebaseUser;
+
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class MainActivity extends AppCompatActivity {
     BottomNavigationView navView;
 
-    RecyclerView contactList;     //to show contact list when find_people button is clicked
+    RecyclerView myContactsList;     //to show contact list when find_people button is clicked
     ImageView findPeopleBtn;
+
+    private DatabaseReference contactsRef, usersRef;
+    private FirebaseAuth mAuth;
+    private String currentUserID;
+    private String userName="", profileImage="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
+
+        mAuth =FirebaseAuth.getInstance();
+        currentUserID = mAuth.getCurrentUser().getUid();
+        contactsRef = FirebaseDatabase.getInstance().getReference().child("Contacts");
+
         navView = findViewById(R.id.nav_view);
         navView.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
 
-        contactList=findViewById(R.id.contact_list);
+        myContactsList=findViewById(R.id.contact_list);
         findPeopleBtn=findViewById(R.id.find_people_btn);
-        contactList.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        myContactsList.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        usersRef=FirebaseDatabase.getInstance().getReference().child("Users");
 
         findPeopleBtn.setOnClickListener(new View.OnClickListener() {            //to show contact list when find_people button is clicked
             @Override
@@ -85,15 +106,72 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-//        if(firebaseUser == null){
-//            Intent homeIntent = new Intent(MainActivity.this,RegistrationActivity.class);
-//            startActivity(homeIntent);
-//            finish();
-//        }
-//    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        FirebaseRecyclerOptions<Contacts> options=
+                new FirebaseRecyclerOptions.Builder<Contacts>()
+                .setQuery(contactsRef.child(currentUserID), Contacts.class)
+                .build();
+        FirebaseRecyclerAdapter<Contacts , ContactsViewHolder> firebaseRecyclerAdapter
+                = new FirebaseRecyclerAdapter<Contacts, ContactsViewHolder>(options) {
+            @Override
+            protected void onBindViewHolder(@NonNull ContactsViewHolder holder, int i, @NonNull Contacts model) {
+                final String listUserID=getRef(i).getKey();
+                usersRef.child(listUserID).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if(snapshot.exists())
+                        {
+                            userName = snapshot.child("name").getValue().toString();
+                            profileImage = snapshot.child("image").getValue().toString();
+
+                            holder.userNameText.setText(userName);
+                            Picasso.get().load(profileImage).into(holder.profileImageView);
+
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
+
+            @NonNull
+            @Override
+            public ContactsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.contact_design,parent,false);
+                ContactsViewHolder viewHolder = new ContactsViewHolder(view);
+                return viewHolder;
+            }
+        };
+        myContactsList.setAdapter(firebaseRecyclerAdapter);
+        firebaseRecyclerAdapter.startListening();
+
+    }
+
+    public static class ContactsViewHolder extends RecyclerView.ViewHolder {
+
+        TextView userNameText;
+        Button callBtn;
+        ImageView profileImageView;
+
+
+        public ContactsViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            userNameText=itemView.findViewById(R.id.name_contact);
+            callBtn=itemView.findViewById(R.id.call_btn);
+            profileImageView=itemView.findViewById(R.id.image_contact);
+
+
+        }
+    }
+
+
 }
 
