@@ -46,7 +46,7 @@ public class NotificationActivity extends AppCompatActivity {
         currentUserID=mAuth.getCurrentUser().getUid();
         friendRequestRef = FirebaseDatabase.getInstance().getReference().child("Friend Requests");   //friend request ref stores the reference to friend requests
         contactsRef = FirebaseDatabase.getInstance().getReference().child("Contacts");   //contacts is storing the reference to already added friends
-        usersRef=FirebaseDatabase.getInstance().getReference().child("Users");   //users stores reference to users in the database
+        usersRef=FirebaseDatabase.getInstance().getReference().child("User");   //users stores reference to users in the database
 
 
         NotificationList=findViewById(R.id.notification_list);
