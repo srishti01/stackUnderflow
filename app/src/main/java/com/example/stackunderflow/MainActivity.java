@@ -8,6 +8,7 @@ import android.widget.ImageView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -83,5 +84,16 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
     };
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if(firebaseUser == null){
+            Intent homeIntent = new Intent(MainActivity.this,RegistrationActivity.class);
+            startActivity(homeIntent);
+            finish();
+        }
+    }
 }
 
