@@ -132,8 +132,7 @@ public class SettingsActivity extends AppCompatActivity {
             progressDialog.show();
 
             //Here we have to save the user DP,name,bio in the firebase database
-            final StorageReference filePath = userProfileImgRef.
-                    child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+            final StorageReference filePath = userProfileImgRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid());
             final UploadTask uploadTask = filePath.putFile(imageUri);
 
             //we have stored the image in the FirebaseStorage
