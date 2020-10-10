@@ -8,6 +8,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -15,6 +17,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
+
+import java.util.HashMap;
 
 public class CallingActivity extends AppCompatActivity {
     private TextView nameContact;
@@ -25,7 +29,7 @@ public class CallingActivity extends AppCompatActivity {
     private String senderUserId="", senderUserImage="", senderUserName="";
     private DatabaseReference usersRef;
 
-    
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,5 +73,42 @@ public class CallingActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        usersRef.child(recieverUserId)
+                .addListenerForSingleValueEvent(new ValueEventListener() {//SingleValueEvent = only one time
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if(!snapshot.hasChild("Calling") && !snapshot.hasChild("Ringing"))//THis line ensure that user is not busy on another call
+                        {
+                            final HashMap<String, Object> callingInfo = new HashMap<>();
+                            callingInfo.put("calling",recieverUserId); //uid(senderUserId will be make call to calling(receiverUserId)
+
+                            usersRef.child(senderUserId).child("Calling")
+                                    .updateChildren(callingInfo)
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if(task.isSuccessful()){
+                                                final HashMap<String, Object> ringingInfo = new HashMap<>();
+                                                ringingInfo.put("ringing",senderUserId);//the receiver wil need sender id to see who's calling
+
+                                                usersRef.child(recieverUserId).child("Ringing")
+                                                        .updateChildren(ringingInfo);
+                                            }
+                                        }
+                                    });
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
     }
 }

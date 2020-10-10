@@ -40,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
     private String currentUserID;
     private String userName="", profileImage="";
 
+    private String calledBy = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,6 +112,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
+        checkForReceivingCall();
         
         validateUser();
 
@@ -165,6 +169,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
     private void validateUser() {
         //Here we are going to check if user has dp,name and bio or not
         //We will create a reference and check if the prfile pic and name exist
@@ -203,6 +208,28 @@ public class MainActivity extends AppCompatActivity {
 
 
         }
+    }
+
+    private void checkForReceivingCall() {
+        usersRef.child(currentUserID)
+                .child("Ringing")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if(snapshot.hasChild("ringing")){//"ringing" was the senderID which the receiver receives so we need this to show receiver the name of sender
+                            calledBy = snapshot.child("ringing").getValue().toString();
+
+                            Intent callingIntent = new Intent(MainActivity.this,CallingActivity.class);
+                            callingIntent.putExtra("visit_user_id",calledBy);
+                            startActivity(callingIntent);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
     }
 
 
