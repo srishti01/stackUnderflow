@@ -177,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
         reference.child("Users").child(currentUserID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(!(snapshot.hasChild("Name"))){
+                if(!snapshot.exists()){
                     Intent settingsIntent = new Intent(MainActivity.this,SettingsActivity.class); //If the user does not exist
                                                                                                         //he/she will not be able to go to mainActivity
                     startActivity(settingsIntent);
