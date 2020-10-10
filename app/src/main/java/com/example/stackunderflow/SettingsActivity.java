@@ -235,9 +235,9 @@ public class SettingsActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if(snapshot.exists()){
-                            String imageFromDb = snapshot.child("image").toString();
-                            String nameFromDb = snapshot.child("Name").toString();
-                            String bioFromDb = snapshot.child("Bio").toString(); //Here we have taken the name already present int the database
+                            String imageFromDb = snapshot.child("image").getValue().toString();
+                            String nameFromDb = snapshot.child("Name").getValue().toString();
+                            String bioFromDb = snapshot.child("Bio").getValue().toString(); //Here we have taken the name already present int the database
 
                             mUsername.setText(nameFromDb);;
                             mBio.setText(bioFromDb);
