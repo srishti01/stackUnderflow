@@ -25,6 +25,8 @@ public class CallingActivity extends AppCompatActivity {
     private String senderUserId="", senderUserImage="", senderUserName="";
     private DatabaseReference usersRef;
 
+    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
