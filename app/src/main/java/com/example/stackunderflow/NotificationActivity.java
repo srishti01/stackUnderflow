@@ -109,7 +109,7 @@ public class NotificationActivity extends AppCompatActivity {
 
                                         }
 
-                                            final String nameStr=snapshot.child("name").getValue().toString();  //tp display username
+                                            final String nameStr=snapshot.child("Name").getValue().toString();  //tp display username
                                             holder.userNameText.setText(nameStr);
 
 

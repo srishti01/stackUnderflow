@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if(snapshot.exists())
                         {
-                            userName = snapshot.child("name").getValue().toString();
+                            userName = snapshot.child("Name").getValue().toString();
                             profileImage = snapshot.child("image").getValue().toString();
 
                             holder.userNameText.setText(userName);

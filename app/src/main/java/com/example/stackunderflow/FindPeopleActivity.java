@@ -47,7 +47,7 @@ public class FindPeopleActivity extends AppCompatActivity {
         findPeopleList = findViewById(R.id.find_people_list);
         findPeopleList.setLayoutManager( new LinearLayoutManager(getApplicationContext()));
 
-        usersRef = FirebaseDatabase.getInstance().getReference().child("Users");
+        usersRef = FirebaseDatabase.getInstance().getReference().child("User");
 
         searchET.addTextChangedListener(new TextWatcher() {        //inbuilt method to access and implement functions when text is added in searchbar
             @Override
@@ -88,7 +88,7 @@ public class FindPeopleActivity extends AppCompatActivity {
         {
             options =
                     new FirebaseRecyclerOptions.Builder<Contacts>()
-                            .setQuery(usersRef.orderByChild("name").startAt(str).endAt(str + "\uf8ff")
+                            .setQuery(usersRef.orderByChild("Name").startAt(str).endAt(str + "\uf8ff")
                                     , Contacts.class)
                             .build();  //search database when str is not null
         }
