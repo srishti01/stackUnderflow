@@ -19,7 +19,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -132,8 +131,7 @@ public class SettingsActivity extends AppCompatActivity {
             progressDialog.show();
 
             //Here we have to save the user DP,name,bio in the firebase database
-            final StorageReference filePath = userProfileImgRef.
-                    child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+            final StorageReference filePath = userProfileImgRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid());
             final UploadTask uploadTask = filePath.putFile(imageUri);
 
             //we have stored the image in the FirebaseStorage
@@ -237,9 +235,9 @@ public class SettingsActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if(snapshot.exists()){
-                            String imageFromDb = snapshot.child("image").toString();
-                            String nameFromDb = snapshot.child("Name").toString();
-                            String bioFromDb = snapshot.child("Bio").toString(); //Here we have taken the name already present int the database
+                            String imageFromDb = snapshot.child("image").getValue().toString();
+                            String nameFromDb = snapshot.child("Name").getValue().toString();
+                            String bioFromDb = snapshot.child("Bio").getValue().toString(); //Here we have taken the name already present int the database
 
                             mUsername.setText(nameFromDb);;
                             mBio.setText(bioFromDb);

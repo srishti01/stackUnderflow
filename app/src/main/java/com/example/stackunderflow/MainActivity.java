@@ -40,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
     private String currentUserID;
     private String userName="", profileImage="";
 
+    private String calledBy = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,6 +113,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
+        checkForReceivingCall();
+        
+//        validateUser();
+
         FirebaseRecyclerOptions<Contacts> options=
                 new FirebaseRecyclerOptions.Builder<Contacts>()
                 .setQuery(contactsRef.child(currentUserID), Contacts.class)
@@ -120,18 +126,27 @@ public class MainActivity extends AppCompatActivity {
             @Override
             protected void onBindViewHolder(@NonNull ContactsViewHolder holder, int i, @NonNull Contacts model) {
                 final String listUserID=getRef(i).getKey();
+
                 usersRef.child(listUserID).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if(snapshot.exists())
                         {
-                            userName = snapshot.child("name").getValue().toString();
+                            userName = snapshot.child("Name").getValue().toString();
                             profileImage = snapshot.child("image").getValue().toString();
 
                             holder.userNameText.setText(userName);
                             Picasso.get().load(profileImage).into(holder.profileImageView);
 
                         }
+                        holder.callBtn.setOnClickListener(new View.OnClickListener() {//when user clicks on the video call button
+                            @Override
+                            public void onClick(View v) {
+                                Intent callingIntent = new Intent(MainActivity.this,CallingActivity.class);
+                                callingIntent.putExtra("visit_user_id",listUserID); //here we are sending the listUserID to the Callingactivity
+                                startActivity(callingIntent);                               //so that we will see who we have called
+                            }
+                        });
                     }
 
                     @Override
@@ -154,6 +169,29 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+    private void validateUser() {
+        //Here we are going to check if user has dp,name and bio or not
+        //We will create a reference and check if the prfile pic and name exist
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+        reference.child("Users").child(currentUserID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(!(snapshot.hasChild("Name"))){
+                    Intent settingsIntent = new Intent(MainActivity.this,SettingsActivity.class); //If the user does not exist
+                                                                                                        //he/she will not be able to go to mainActivity
+                    startActivity(settingsIntent);
+                    finish();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
     public static class ContactsViewHolder extends RecyclerView.ViewHolder {
 
         TextView userNameText;
@@ -170,6 +208,28 @@ public class MainActivity extends AppCompatActivity {
 
 
         }
+    }
+
+    private void checkForReceivingCall() {
+        usersRef.child(currentUserID)
+                .child("Ringing")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if(snapshot.hasChild("ringing")){//"ringing" was the senderID which the receiver receives so we need this to show receiver the name of sender
+                            calledBy = snapshot.child("ringing").getValue().toString();
+
+                            Intent callingIntent = new Intent(MainActivity.this,CallingActivity.class);
+                            callingIntent.putExtra("visit_user_id",calledBy);
+                            startActivity(callingIntent);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
     }
 
 
