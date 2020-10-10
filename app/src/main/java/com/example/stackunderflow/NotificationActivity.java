@@ -46,7 +46,7 @@ public class NotificationActivity extends AppCompatActivity {
         currentUserID=mAuth.getCurrentUser().getUid();
         friendRequestRef = FirebaseDatabase.getInstance().getReference().child("Friend Requests");   //friend request ref stores the reference to friend requests
         contactsRef = FirebaseDatabase.getInstance().getReference().child("Contacts");   //contacts is storing the reference to already added friends
-        usersRef=FirebaseDatabase.getInstance().getReference().child("Users");   //users stores reference to users in the database
+        usersRef=FirebaseDatabase.getInstance().getReference().child("User");   //users stores reference to users in the database
 
 
         NotificationList=findViewById(R.id.notification_list);
@@ -201,8 +201,8 @@ public class NotificationActivity extends AppCompatActivity {
             public notificationViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)  //set view acc to find_people_design
             {
                View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.find_people_design,parent,false);
-               notificationViewHolder viewHolder=new notificationViewHolder(view);
-               return viewHolder;
+                notificationViewHolder viewHolder=new notificationViewHolder(view);
+                return viewHolder;
             }
         };
         NotificationList.setAdapter(firebaseRecyclerAdapter);
