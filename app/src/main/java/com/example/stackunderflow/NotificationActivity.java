@@ -201,8 +201,8 @@ public class NotificationActivity extends AppCompatActivity {
             public notificationViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)  //set view acc to find_people_design
             {
                View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.find_people_design,parent,false);
-               notificationViewHolder viewHolder=new notificationViewHolder(view);
-               return viewHolder;
+                notificationViewHolder viewHolder=new notificationViewHolder(view);
+                return viewHolder;
             }
         };
         NotificationList.setAdapter(firebaseRecyclerAdapter);

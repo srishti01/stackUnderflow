@@ -110,6 +110,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        
+        validateUser();
 
         FirebaseRecyclerOptions<Contacts> options=
                 new FirebaseRecyclerOptions.Builder<Contacts>()
@@ -120,6 +122,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             protected void onBindViewHolder(@NonNull ContactsViewHolder holder, int i, @NonNull Contacts model) {
                 final String listUserID=getRef(i).getKey();
+
                 usersRef.child(listUserID).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -132,6 +135,14 @@ public class MainActivity extends AppCompatActivity {
                             Picasso.get().load(profileImage).into(holder.profileImageView);
 
                         }
+                        holder.callBtn.setOnClickListener(new View.OnClickListener() {//when user clicks on the video call button
+                            @Override
+                            public void onClick(View v) {
+                                Intent callingIntent = new Intent(MainActivity.this,CallingActivity.class);
+                                callingIntent.putExtra("visit_user_id",listUserID); //here we are sending the listUserID to the Callingactivity
+                                startActivity(callingIntent);                               //so that we will see who we have called
+                            }
+                        });
                     }
 
                     @Override
@@ -152,6 +163,28 @@ public class MainActivity extends AppCompatActivity {
         myContactsList.setAdapter(firebaseRecyclerAdapter);
         firebaseRecyclerAdapter.startListening();
 
+    }
+
+    private void validateUser() {
+        //Here we are going to check if user has dp,name and bio or not
+        //We will create a reference and check if the prfile pic and name exist
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+        reference.child("Users").child(currentUserID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(!snapshot.exists()){
+                    Intent settingsIntent = new Intent(MainActivity.this,SettingsActivity.class); //If the user does not exist
+                                                                                                        //he/she will not be able to go to mainActivity
+                    startActivity(settingsIntent);
+                    finish();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     public static class ContactsViewHolder extends RecyclerView.ViewHolder {
