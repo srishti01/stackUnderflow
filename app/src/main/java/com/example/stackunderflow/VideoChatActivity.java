@@ -7,7 +7,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
-import android.se.omapi.Session;
+import com.opentok.android.Session;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
