@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         myContactsList=findViewById(R.id.contact_list);
         findPeopleBtn=findViewById(R.id.find_people_btn);
         myContactsList.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        usersRef=FirebaseDatabase.getInstance().getReference().child("Users");
+        usersRef=FirebaseDatabase.getInstance().getReference().child("User");
 
         findPeopleBtn.setOnClickListener(new View.OnClickListener() {            //to show contact list when find_people button is clicked
             @Override
@@ -121,10 +121,13 @@ public class MainActivity extends AppCompatActivity {
                 new FirebaseRecyclerOptions.Builder<Contacts>()
                 .setQuery(contactsRef.child(currentUserID), Contacts.class)
                 .build();
+
         FirebaseRecyclerAdapter<Contacts , ContactsViewHolder> firebaseRecyclerAdapter
-                = new FirebaseRecyclerAdapter<Contacts, ContactsViewHolder>(options) {
+                = new FirebaseRecyclerAdapter<Contacts, ContactsViewHolder>(options)
+        {
             @Override
-            protected void onBindViewHolder(@NonNull ContactsViewHolder holder, int i, @NonNull Contacts model) {
+            protected void onBindViewHolder(@NonNull ContactsViewHolder holder, int i, @NonNull Contacts model)
+            {
                 final String listUserID=getRef(i).getKey();
 
                 usersRef.child(listUserID).addValueEventListener(new ValueEventListener() {
@@ -158,7 +161,8 @@ public class MainActivity extends AppCompatActivity {
 
             @NonNull
             @Override
-            public ContactsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            public ContactsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
+            {
                 View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.contact_design,parent,false);
                 ContactsViewHolder viewHolder = new ContactsViewHolder(view);
                 return viewHolder;

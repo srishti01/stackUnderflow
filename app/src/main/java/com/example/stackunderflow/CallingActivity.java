@@ -42,7 +42,7 @@ public class CallingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_calling);
 
         recieverUserId = getIntent().getExtras().get("visit_user_id").toString();//we now have the userID from the last activity, now we can get the name and dp
-        usersRef = FirebaseDatabase.getInstance().getReference().child("Users");
+        usersRef = FirebaseDatabase.getInstance().getReference().child("User");
         senderUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         mMediaPlayer=MediaPlayer.create(this,R.raw.ringing_tone);   //media to ringing tone while calling
@@ -97,7 +97,8 @@ public class CallingActivity extends AppCompatActivity {
         usersRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {//DataSnapshot represent our users node so we can use it to retrieve info from the dataase
-                if(snapshot.child(recieverUserId).exists()){
+                if(snapshot.child(recieverUserId).exists())
+                {
                     recieverUserImage = snapshot.child(recieverUserId).child("image").getValue().toString();
                     recieverUserName = snapshot.child(recieverUserId).child("Name").getValue().toString();
                     //NOW we have retrieved the Name and profile image from the database using snapshot
