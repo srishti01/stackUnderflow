@@ -62,6 +62,7 @@ public class FindPeopleActivity extends AppCompatActivity {
                 else
                 {
                     str=s.toString();   //the text to be searched is stored in str
+                    onStart();
                 }
             }
 
@@ -147,6 +148,7 @@ public class FindPeopleActivity extends AppCompatActivity {
                  cardView1 = itemView.findViewById(R.id.card_view1);
 
                  videoCallBtn.setVisibility(View.GONE); //videocall option wont be shown when the user is being displayed as a result of search
+                 userNameTxt.setVisibility(View.VISIBLE);
              }
     }
 }
