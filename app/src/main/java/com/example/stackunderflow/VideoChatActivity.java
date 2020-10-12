@@ -33,7 +33,10 @@ import static com.opentok.android.PublisherKit.*;
 public class VideoChatActivity extends AppCompatActivity implements com.opentok.android.Session.SessionListener,
         PublisherListener {
 
-    private static String API_key="",SESSION_ID="",TOKEN="";
+    private static String API_key="46950994",SESSION_ID="2_MX40Njk1MDk5NH5-MTYwMjQ4OTM1MDc5MH4ybkFkT2pGNllQdmtjYzhvN3ZGKzdYdnV-fg",
+            TOKEN="T1==cGFydG5lcl9pZD00Njk1MDk5NCZzaWc9OTVjNDI5YjAzZjdkNGY4YzZmZmRmNTRhZWRkMGE3YjM2NjA2ODI2ODpzZXNzaW9uX2lkPTJfTVg0ME5qazFNRGs1Tkg1LU1UWXdNalE0T1RNMU1EYzVNSDR5YmtGa1QycEdObGxRZG10all6aHZOM1pHS3pkWWRuVi1mZyZjcmVhdGVfdGltZT0xNjAyNDg5NDM1Jm5vbmNlPTAuNzE0MTg1ODA1ODc1Njc0OSZyb2xlPXB1Ymxpc2hlciZleHBpcmVfdGltZT0xNjA1MDg1MDM0JmluaXRpYWxfbGF5b3V0X2NsYXNzX2xpc3Q9";
+
+
     private static final String LOG_TAG=VideoChatActivity.class.getSimpleName();
     private static final int RC_VIDEO_APP_PERM=124;
 
@@ -52,7 +55,7 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
         setContentView(R.layout.activity_video_chat);
 
         userID= FirebaseAuth.getInstance().getCurrentUser().getUid();
-        usersRef = FirebaseDatabase.getInstance().getReference().child("Users");
+        usersRef = FirebaseDatabase.getInstance().getReference().child("User");
 
         closeVideoChatBtn = findViewById(R.id.cancel_call);
         closeVideoChatBtn.setOnClickListener(new View.OnClickListener() {
@@ -112,6 +115,8 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
                 });
             }
         });
+
+        requestPermissions();
     }
 
     @Override

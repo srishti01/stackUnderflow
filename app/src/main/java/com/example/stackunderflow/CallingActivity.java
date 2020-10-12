@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -32,6 +33,7 @@ public class CallingActivity extends AppCompatActivity {
     private DatabaseReference usersRef;
     private String callingID="",ringingID="";
 
+    private MediaPlayer mMediaPlayer;
 
 
     @Override
@@ -43,15 +45,44 @@ public class CallingActivity extends AppCompatActivity {
         usersRef = FirebaseDatabase.getInstance().getReference().child("Users");
         senderUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
+        mMediaPlayer=MediaPlayer.create(this,R.raw.ringing_tone);   //media to ringing tone while calling
+
         nameContact = (TextView) findViewById(R.id.name_contact);
         profileImage = (ImageView) findViewById(R.id.profile_image_calling);
         cancelCallBtn = (ImageView) findViewById(R.id.cancel_call);
         acceptCallBtn = (ImageView) findViewById(R.id.make_call);
 
+        acceptCallBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)
+            {
+                mMediaPlayer.stop();
+
+                final HashMap<String,Object> callingPickupMap= new HashMap<>();
+
+                callingPickupMap.put("picked","picked");
+
+                // if the user pickup the call we need to update the child of Ringing from ringing to picked(map)
+                usersRef.child(senderUserId).child("Ringing").updateChildren(callingPickupMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task)
+                    {
+                        if(task.isSuccessful())
+                        {
+                            Intent intent=new Intent(CallingActivity.this,VideoChatActivity.class);
+                            startActivity(intent);
+                        }
+                    }
+                });
+            }
+        });
+
         cancelCallBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
             {
+                mMediaPlayer.stop();
+
                 checker="clicked";  //value to check if the  button is clicked
                 //when user click on cancel button we need to remove calling nad ringing child in the database of the user node
 
@@ -93,6 +124,8 @@ public class CallingActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
+        mMediaPlayer.start();
+
         usersRef.child(recieverUserId)
                 .addListenerForSingleValueEvent(new ValueEventListener() {//SingleValueEvent = only one time
                     @Override
@@ -132,6 +165,14 @@ public class CallingActivity extends AppCompatActivity {
                 if(snapshot.child(senderUserId).hasChild("Ringing") && !snapshot.child(senderUserId).hasChild("Calling"))
                 {
                     acceptCallBtn.setVisibility(View.VISIBLE);
+                }
+
+                if(snapshot.child(recieverUserId).child("Ringing").hasChild("picked"))
+                {
+                    mMediaPlayer.stop();
+
+                    Intent intent=new Intent(CallingActivity.this,VideoChatActivity.class);
+                    startActivity(intent);
                 }
 
             }
