@@ -47,7 +47,7 @@ public class FindPeopleActivity extends AppCompatActivity {
         findPeopleList = findViewById(R.id.find_people_list);
         findPeopleList.setLayoutManager( new LinearLayoutManager(getApplicationContext()));
 
-        usersRef = FirebaseDatabase.getInstance().getReference().child("Users");
+        usersRef = FirebaseDatabase.getInstance().getReference().child("User");
 
         searchET.addTextChangedListener(new TextWatcher() {        //inbuilt method to access and implement functions when text is added in searchbar
             @Override
@@ -62,6 +62,7 @@ public class FindPeopleActivity extends AppCompatActivity {
                 else
                 {
                     str=s.toString();   //the text to be searched is stored in str
+                    onStart();
                 }
             }
 
@@ -88,7 +89,7 @@ public class FindPeopleActivity extends AppCompatActivity {
         {
             options =
                     new FirebaseRecyclerOptions.Builder<Contacts>()
-                            .setQuery(usersRef.orderByChild("name").startAt(str).endAt(str + "\uf8ff")
+                            .setQuery(usersRef.orderByChild("Name").startAt(str).endAt(str + "\uf8ff")
                                     , Contacts.class)
                             .build();  //search database when str is not null
         }
@@ -97,7 +98,8 @@ public class FindPeopleActivity extends AppCompatActivity {
                 = new FirebaseRecyclerAdapter<Contacts, FindFriendsViewHolder>(options)
         {
             @Override
-            protected void onBindViewHolder(@NonNull FindFriendsViewHolder holder, final int position, @NonNull final Contacts model) {
+            protected void onBindViewHolder(@NonNull FindFriendsViewHolder holder, final int position, @NonNull final Contacts model)
+            {
                 holder.userNameTxt.setText(model.getName());     //holder is locally generated variable to store name of the user displayed in searched
                 Picasso.get().load(model.getImage()).into(holder.profileImageView); //picasso method is accessing and displaying the dp
                 holder.itemView.setOnClickListener(new View.OnClickListener()
@@ -110,8 +112,8 @@ public class FindPeopleActivity extends AppCompatActivity {
 
                         Intent intent = new Intent(FindPeopleActivity.this, ProfileActivity.class);
                         intent.putExtra("visit_user_id", visit_user_id );
-                        intent.putExtra("profile_image", model.getImage() );
-                        intent.putExtra("profile_name", model.getName() );
+                        intent.putExtra("profile_image",model.getImage());
+                        intent.putExtra("profile_name", model.getName());
 
                         startActivity(intent); //profile activity is being started by giving information of user_id,image and name
                     }
@@ -120,12 +122,14 @@ public class FindPeopleActivity extends AppCompatActivity {
 
             @NonNull
             @Override
-            public FindFriendsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.contact_design, parent, false);  //accessing contact_design
-                FindFriendsViewHolder viewholder = new FindFriendsViewHolder(view);
-                return viewholder;    // to display the search results
+            public FindFriendsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
+            {
+                View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.contact_design,parent,false);
+                FindFriendsViewHolder viewHolder = new FindFriendsViewHolder(view);
+                return viewHolder;
             }
         };
+
         findPeopleList.setAdapter(firebaseRecyclerAdapter);
         firebaseRecyclerAdapter.startListening(); //this will enable displaying the suggested users whenever we change text in searchbar
     }
@@ -147,6 +151,7 @@ public class FindPeopleActivity extends AppCompatActivity {
                  cardView1 = itemView.findViewById(R.id.card_view1);
 
                  videoCallBtn.setVisibility(View.GONE); //videocall option wont be shown when the user is being displayed as a result of search
+
              }
     }
 }
