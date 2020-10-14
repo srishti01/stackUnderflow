@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         myContactsList=findViewById(R.id.contact_list);
         findPeopleBtn=findViewById(R.id.find_people_btn);
         myContactsList.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        usersRef=FirebaseDatabase.getInstance().getReference().child("Users");
+        usersRef=FirebaseDatabase.getInstance().getReference().child("User");
 
         findPeopleBtn.setOnClickListener(new View.OnClickListener() {            //to show contact list when find_people button is clicked
             @Override
@@ -115,16 +115,19 @@ public class MainActivity extends AppCompatActivity {
 
         checkForReceivingCall();
         
-//        validateUser();
+        validateUser();
 
         FirebaseRecyclerOptions<Contacts> options=
                 new FirebaseRecyclerOptions.Builder<Contacts>()
                 .setQuery(contactsRef.child(currentUserID), Contacts.class)
                 .build();
+
         FirebaseRecyclerAdapter<Contacts , ContactsViewHolder> firebaseRecyclerAdapter
-                = new FirebaseRecyclerAdapter<Contacts, ContactsViewHolder>(options) {
+                = new FirebaseRecyclerAdapter<Contacts, ContactsViewHolder>(options)
+        {
             @Override
-            protected void onBindViewHolder(@NonNull ContactsViewHolder holder, int i, @NonNull Contacts model) {
+            protected void onBindViewHolder(@NonNull ContactsViewHolder holder, int i, @NonNull Contacts model)
+            {
                 final String listUserID=getRef(i).getKey();
 
                 usersRef.child(listUserID).addValueEventListener(new ValueEventListener() {
@@ -158,7 +161,8 @@ public class MainActivity extends AppCompatActivity {
 
             @NonNull
             @Override
-            public ContactsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            public ContactsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
+            {
                 View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.contact_design,parent,false);
                 ContactsViewHolder viewHolder = new ContactsViewHolder(view);
                 return viewHolder;
@@ -174,10 +178,11 @@ public class MainActivity extends AppCompatActivity {
         //Here we are going to check if user has dp,name and bio or not
         //We will create a reference and check if the prfile pic and name exist
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-        reference.child("Users").child(currentUserID).addValueEventListener(new ValueEventListener() {
+        reference.child("User").child(currentUserID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(!snapshot.exists()){
+                if(!snapshot.exists())
+                {
                     Intent settingsIntent = new Intent(MainActivity.this,SettingsActivity.class); //If the user does not exist
                                                                                                         //he/she will not be able to go to mainActivity
                     startActivity(settingsIntent);
@@ -215,7 +220,8 @@ public class MainActivity extends AppCompatActivity {
                 .child("Ringing")
                 .addValueEventListener(new ValueEventListener() {
                     @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    public void onDataChange(@NonNull DataSnapshot snapshot)
+                    {
                         if(snapshot.hasChild("ringing")){//"ringing" was the senderID which the receiver receives so we need this to show receiver the name of sender
                             calledBy = snapshot.child("ringing").getValue().toString();
 

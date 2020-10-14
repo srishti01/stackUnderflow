@@ -33,7 +33,10 @@ import static com.opentok.android.PublisherKit.*;
 public class VideoChatActivity extends AppCompatActivity implements com.opentok.android.Session.SessionListener,
         PublisherListener {
 
-    private static String API_key="",SESSION_ID="",TOKEN="";
+    private static String API_key="46950994",SESSION_ID="2_MX40Njk1MDk5NH5-MTYwMjQ4OTM1MDc5MH4ybkFkT2pGNllQdmtjYzhvN3ZGKzdYdnV-fg",
+            TOKEN="T1==cGFydG5lcl9pZD00Njk1MDk5NCZzaWc9OTVjNDI5YjAzZjdkNGY4YzZmZmRmNTRhZWRkMGE3YjM2NjA2ODI2ODpzZXNzaW9uX2lkPTJfTVg0ME5qazFNRGs1Tkg1LU1UWXdNalE0T1RNMU1EYzVNSDR5YmtGa1QycEdObGxRZG10all6aHZOM1pHS3pkWWRuVi1mZyZjcmVhdGVfdGltZT0xNjAyNDg5NDM1Jm5vbmNlPTAuNzE0MTg1ODA1ODc1Njc0OSZyb2xlPXB1Ymxpc2hlciZleHBpcmVfdGltZT0xNjA1MDg1MDM0JmluaXRpYWxfbGF5b3V0X2NsYXNzX2xpc3Q9";
+
+
     private static final String LOG_TAG=VideoChatActivity.class.getSimpleName();
     private static final int RC_VIDEO_APP_PERM=124;
 
@@ -52,13 +55,16 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
         setContentView(R.layout.activity_video_chat);
 
         userID= FirebaseAuth.getInstance().getCurrentUser().getUid();
-        usersRef = FirebaseDatabase.getInstance().getReference().child("Users");
+        usersRef = FirebaseDatabase.getInstance().getReference().child("User");
 
-        closeVideoChatBtn = findViewById(R.id.cancel_call);
-        closeVideoChatBtn.setOnClickListener(new View.OnClickListener() {
+        closeVideoChatBtn = findViewById(R.id.close_video_chat_btn);
+
+        closeVideoChatBtn.setOnClickListener(new View.OnClickListener()
+        {
             @Override
             public void onClick(View v) {
-                usersRef.addValueEventListener(new ValueEventListener() {
+                usersRef.addValueEventListener(new ValueEventListener()
+                {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if(snapshot.child("userID").hasChild("Ringing"))
@@ -78,7 +84,7 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
                         }
                         if(snapshot.child("userID").hasChild("Calling"))
                         {
-                            usersRef.child(userID).child("calling").removeValue();
+                            usersRef.child(userID).child("Calling").removeValue();
                             if(mPublisher!=null)
                             {
                                 mPublisher.destroy();
@@ -112,19 +118,23 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
                 });
             }
         });
+
+        requestPermissions();
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
+    {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         EasyPermissions.onRequestPermissionsResult(requestCode,permissions,grantResults, VideoChatActivity.this);
     }
 
-    @AfterPermissionGranted(RC_VIDEO_APP_PERM)
+    @AfterPermissionGranted(RC_VIDEO_APP_PERM)    // to request permission for camera and audio
     private void requestPermissions()
     {
         String[] perms = {Manifest.permission.INTERNET , Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO};
+
         if(EasyPermissions.hasPermissions(this,perms))
         {
             mPublisherViewController = findViewById(R.id.publisher_container);
@@ -138,6 +148,7 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
         }
         else
         {
+            //else this msg will be displayed
             EasyPermissions.requestPermissions(this,"this app needs mic and camera permissions,Please Allow", RC_VIDEO_APP_PERM);
         }
     }
@@ -166,14 +177,14 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
         mPublisher = new Publisher.Builder(this).build();
         mPublisher.setPublisherListener(VideoChatActivity.this);
 
-        mPublisherViewController.addView(mPublisher.getView());
+        mPublisherViewController.addView(mPublisher.getView());  //to get and display publisher video
 
         if(mPublisher.getView() instanceof GLSurfaceView)
         {
             ((GLSurfaceView) mPublisher.getView()).setZOrderOnTop(true);
         }
 
-        mSession.publish(mPublisher);
+        mSession.publish(mPublisher);  //to put publisher into the session
     }
 
     @Override
@@ -191,7 +202,7 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
         {
             mSubscriber = new Subscriber.Builder(this , stream).build();
             mSession.subscribe(mSubscriber);
-            mSubscriberViewController.addView(mSubscriber.getView());
+            mSubscriberViewController.addView(mSubscriber.getView());   //to get and display subscriber video
         }
     }
 
@@ -202,7 +213,7 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
         if(mSubscriber!=null)
         {
             mSubscriber=null;
-            mSubscriberViewController.removeAllViews();
+            mSubscriberViewController.removeAllViews();   //this will remove view from the container 
         }
     }
 

@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -32,6 +33,7 @@ public class CallingActivity extends AppCompatActivity {
     private DatabaseReference usersRef;
     private String callingID="",ringingID="";
 
+    private MediaPlayer mMediaPlayer;
 
 
     @Override
@@ -40,18 +42,51 @@ public class CallingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_calling);
 
         recieverUserId = getIntent().getExtras().get("visit_user_id").toString();//we now have the userID from the last activity, now we can get the name and dp
-        usersRef = FirebaseDatabase.getInstance().getReference().child("Users");
+        usersRef = FirebaseDatabase.getInstance().getReference().child("User");
         senderUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        nameContact = (TextView) findViewById(R.id.name_contact);
+        mMediaPlayer=MediaPlayer.create(this,R.raw.ringing_tone);   //media to ringing tone while calling
+
+        nameContact = (TextView) findViewById(R.id.name_calling);
         profileImage = (ImageView) findViewById(R.id.profile_image_calling);
         cancelCallBtn = (ImageView) findViewById(R.id.cancel_call);
         acceptCallBtn = (ImageView) findViewById(R.id.make_call);
+
+        acceptCallBtn.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                mMediaPlayer.stop();
+
+                final HashMap<String,Object> callingPickupMap= new HashMap<>();
+
+                callingPickupMap.put("picked","picked");
+
+                // if the user pickup the call we need to update the child of Ringing from ringing to picked(map)
+                usersRef.child(senderUserId).child("Ringing").
+                        updateChildren(callingPickupMap).
+                        addOnCompleteListener(new OnCompleteListener<Void>()
+                {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task)
+                    {
+                        if(task.isSuccessful())
+                        {
+                            Intent intent=new Intent(CallingActivity.this,VideoChatActivity.class);
+                            startActivity(intent);
+                        }
+                    }
+                });
+            }
+        });
 
         cancelCallBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
             {
+                mMediaPlayer.stop();
+
                 checker="clicked";  //value to check if the  button is clicked
                 //when user click on cancel button we need to remove calling nad ringing child in the database of the user node
 
@@ -66,7 +101,8 @@ public class CallingActivity extends AppCompatActivity {
         usersRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {//DataSnapshot represent our users node so we can use it to retrieve info from the dataase
-                if(snapshot.child(recieverUserId).exists()){
+                if(snapshot.child(recieverUserId).exists())
+                {
                     recieverUserImage = snapshot.child(recieverUserId).child("image").getValue().toString();
                     recieverUserName = snapshot.child(recieverUserId).child("Name").getValue().toString();
                     //NOW we have retrieved the Name and profile image from the database using snapshot
@@ -93,6 +129,8 @@ public class CallingActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
+        mMediaPlayer.start();
+
         usersRef.child(recieverUserId)
                 .addListenerForSingleValueEvent(new ValueEventListener() {//SingleValueEvent = only one time
                     @Override
@@ -107,7 +145,8 @@ public class CallingActivity extends AppCompatActivity {
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
-                                            if(task.isSuccessful()){
+                                            if(task.isSuccessful())
+                                            {
                                                 final HashMap<String, Object> ringingInfo = new HashMap<>();
                                                 ringingInfo.put("ringing",senderUserId);//the receiver wil need sender id to see who's calling
 
@@ -134,6 +173,14 @@ public class CallingActivity extends AppCompatActivity {
                     acceptCallBtn.setVisibility(View.VISIBLE);
                 }
 
+                if(snapshot.child(recieverUserId).child("Ringing").hasChild("picked"))
+                {
+                    mMediaPlayer.stop();
+
+                    Intent intent=new Intent(CallingActivity.this,VideoChatActivity.class);
+                    startActivity(intent);
+                }
+
             }
 
             @Override
@@ -150,20 +197,26 @@ public class CallingActivity extends AppCompatActivity {
         //to remove calling nad ringing child in the database, of the user node
 
         //from the sender side
-        usersRef.child(senderUserId).child("Calling").addListenerForSingleValueEvent(new ValueEventListener() {
+        usersRef.child(senderUserId).child("Calling").
+                addListenerForSingleValueEvent(new ValueEventListener()
+                {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot)
             {
                 if(snapshot.exists() && snapshot.hasChild("calling")) //if the sender cancel firsts
                 {
                     callingID=snapshot.child("calling").getValue().toString();
-                    usersRef.child(callingID).child("Ringing").removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+
+                    usersRef.child(callingID).child("Ringing").removeValue().
+                            addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task)
                         {
                             if(task.isSuccessful())
                             {
-                                usersRef.child(senderUserId).child("Calling").removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                usersRef.child(senderUserId).child("Calling").
+                                        removeValue().addOnCompleteListener(new OnCompleteListener<Void>()
+                                {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task)
                                     {
@@ -192,7 +245,8 @@ public class CallingActivity extends AppCompatActivity {
 
         //from the receiver side
 
-        usersRef.child(senderUserId).child("Ringing").addListenerForSingleValueEvent(new ValueEventListener() {
+        usersRef.child(senderUserId).child("Ringing").addListenerForSingleValueEvent(new ValueEventListener()
+        {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot)
             {
