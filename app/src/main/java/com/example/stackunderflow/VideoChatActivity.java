@@ -57,11 +57,14 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
         userID= FirebaseAuth.getInstance().getCurrentUser().getUid();
         usersRef = FirebaseDatabase.getInstance().getReference().child("User");
 
-        closeVideoChatBtn = findViewById(R.id.cancel_call);
-        closeVideoChatBtn.setOnClickListener(new View.OnClickListener() {
+        closeVideoChatBtn = findViewById(R.id.close_video_chat_btn);
+
+        closeVideoChatBtn.setOnClickListener(new View.OnClickListener()
+        {
             @Override
             public void onClick(View v) {
-                usersRef.addValueEventListener(new ValueEventListener() {
+                usersRef.addValueEventListener(new ValueEventListener()
+                {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if(snapshot.child("userID").hasChild("Ringing"))
@@ -81,7 +84,7 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
                         }
                         if(snapshot.child("userID").hasChild("Calling"))
                         {
-                            usersRef.child(userID).child("calling").removeValue();
+                            usersRef.child(userID).child("Calling").removeValue();
                             if(mPublisher!=null)
                             {
                                 mPublisher.destroy();
@@ -120,16 +123,18 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
+    {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         EasyPermissions.onRequestPermissionsResult(requestCode,permissions,grantResults, VideoChatActivity.this);
     }
 
-    @AfterPermissionGranted(RC_VIDEO_APP_PERM)
+    @AfterPermissionGranted(RC_VIDEO_APP_PERM)    // to request permission for camera and audio
     private void requestPermissions()
     {
         String[] perms = {Manifest.permission.INTERNET , Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO};
+
         if(EasyPermissions.hasPermissions(this,perms))
         {
             mPublisherViewController = findViewById(R.id.publisher_container);
@@ -143,6 +148,7 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
         }
         else
         {
+            //else this msg will be displayed
             EasyPermissions.requestPermissions(this,"this app needs mic and camera permissions,Please Allow", RC_VIDEO_APP_PERM);
         }
     }
@@ -171,14 +177,14 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
         mPublisher = new Publisher.Builder(this).build();
         mPublisher.setPublisherListener(VideoChatActivity.this);
 
-        mPublisherViewController.addView(mPublisher.getView());
+        mPublisherViewController.addView(mPublisher.getView());  //to get and display publisher video
 
         if(mPublisher.getView() instanceof GLSurfaceView)
         {
             ((GLSurfaceView) mPublisher.getView()).setZOrderOnTop(true);
         }
 
-        mSession.publish(mPublisher);
+        mSession.publish(mPublisher);  //to put publisher into the session
     }
 
     @Override
@@ -196,7 +202,7 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
         {
             mSubscriber = new Subscriber.Builder(this , stream).build();
             mSession.subscribe(mSubscriber);
-            mSubscriberViewController.addView(mSubscriber.getView());
+            mSubscriberViewController.addView(mSubscriber.getView());   //to get and display subscriber video
         }
     }
 
@@ -207,7 +213,7 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
         if(mSubscriber!=null)
         {
             mSubscriber=null;
-            mSubscriberViewController.removeAllViews();
+            mSubscriberViewController.removeAllViews();   //this will remove view from the container 
         }
     }
 
