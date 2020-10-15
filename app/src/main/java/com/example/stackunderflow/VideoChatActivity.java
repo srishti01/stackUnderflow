@@ -72,10 +72,12 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
                             usersRef.child(userID).child("Ringing").removeValue();
                             if(mPublisher!=null)
                             {
+                                mSession.unpublish(mPublisher);
                                 mPublisher.destroy();
                             }
                             if(mSubscriber!=null)
                             {
+                                mSession.unsubscribe(mSubscriber);
                                 mSubscriber.destroy();
                             }
                             startActivity(new Intent(VideoChatActivity.this, RegistrationActivity.class));
@@ -87,11 +89,13 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
                             usersRef.child(userID).child("Calling").removeValue();
                             if(mPublisher!=null)
                             {
+                                mSession.unpublish(mPublisher);
                                 mPublisher.destroy();
                             }
                             if(mSubscriber!=null)
                             {
                                 mSubscriber.destroy();
+                                mSession.unsubscribe(mSubscriber);
                             }
                             startActivity(new Intent(VideoChatActivity.this, RegistrationActivity.class));
                             finish();
@@ -100,10 +104,12 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
                         {
                             if(mPublisher!=null)
                             {
+                                mSession.unpublish(mPublisher);
                                 mPublisher.destroy();
                             }
                             if(mSubscriber!=null)
                             {
+                                mSession.unsubscribe(mSubscriber);
                                 mSubscriber.destroy();
                             }
                             startActivity(new Intent(VideoChatActivity.this, RegistrationActivity.class));
@@ -149,17 +155,46 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
         else
         {
             //else this msg will be displayed
-            EasyPermissions.requestPermissions(this,"this app needs mic and camera permissions,Please Allow", RC_VIDEO_APP_PERM);
+            EasyPermissions.requestPermissions(this,"this app needs mic and camera permissions,Please Allow", RC_VIDEO_APP_PERM,perms);
         }
     }
 
     @Override
-    public void onStreamCreated(PublisherKit publisherKit, Stream stream) {
+    protected void onPause() {
+
+        Log.i(LOG_TAG, "onPause");
+
+        super.onPause();
+
+        if (mSession != null) {
+            mSession.onPause();
+        }
 
     }
 
     @Override
-    public void onStreamDestroyed(PublisherKit publisherKit, Stream stream) {
+    protected void onResume() {
+
+        Log.i(LOG_TAG, "onResume");
+
+        super.onResume();
+
+        if (mSession != null) {
+            mSession.onResume();
+        }
+    }
+
+
+
+    @Override
+    public void onStreamCreated(PublisherKit publisherKit, Stream stream)
+    {
+
+    }
+
+    @Override
+    public void onStreamDestroyed(PublisherKit publisherKit, Stream stream)
+    {
 
     }
 
@@ -190,6 +225,7 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
     @Override
     public void onDisconnected(com.opentok.android.Session session) {
         Log.i(LOG_TAG,"Stream Disconnected");
+        mSession.disconnect();
     }
 
 
@@ -213,7 +249,7 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
         if(mSubscriber!=null)
         {
             mSubscriber=null;
-            mSubscriberViewController.removeAllViews();   //this will remove view from the container 
+            mSubscriberViewController.removeAllViews();   //this will remove view from the container
         }
     }
 

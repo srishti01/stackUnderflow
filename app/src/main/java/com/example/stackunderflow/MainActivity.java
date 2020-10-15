@@ -220,8 +220,7 @@ public class MainActivity extends AppCompatActivity {
                 .child("Ringing")
                 .addValueEventListener(new ValueEventListener() {
                     @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot)
-                    {
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if(snapshot.hasChild("ringing")){//"ringing" was the senderID which the receiver receives so we need this to show receiver the name of sender
                             calledBy = snapshot.child("ringing").getValue().toString();
 
