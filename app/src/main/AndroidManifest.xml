@@ -11,7 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".VideoChatActivity"></activity>
+        <activity android:name=".VideoChatActivity" />
         <activity android:name=".CallingActivity" />
         <activity android:name=".ProfileActivity" />
         <activity android:name=".FindPeopleActivity" />
@@ -20,7 +20,7 @@
         <activity android:name=".SettingsActivity" />
         <activity
             android:name=".RegistrationActivity"
-            android:label="VideoChat">
+            android:label="AmneSamne">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
