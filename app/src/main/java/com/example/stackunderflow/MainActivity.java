@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
 
         checkForReceivingCall();
         
-//        validateUser();
+        validateUser();
 
         FirebaseRecyclerOptions<Contacts> options=
                 new FirebaseRecyclerOptions.Builder<Contacts>()
@@ -178,10 +178,11 @@ public class MainActivity extends AppCompatActivity {
         //Here we are going to check if user has dp,name and bio or not
         //We will create a reference and check if the prfile pic and name exist
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-        reference.child("Users").child(currentUserID).addValueEventListener(new ValueEventListener() {
+        reference.child("User").child(currentUserID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(!snapshot.exists()){
+                if(!snapshot.exists())
+                {
                     Intent settingsIntent = new Intent(MainActivity.this,SettingsActivity.class); //If the user does not exist
                                                                                                         //he/she will not be able to go to mainActivity
                     startActivity(settingsIntent);

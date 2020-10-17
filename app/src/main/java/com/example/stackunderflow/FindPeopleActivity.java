@@ -100,8 +100,9 @@ public class FindPeopleActivity extends AppCompatActivity {
             @Override
             protected void onBindViewHolder(@NonNull FindFriendsViewHolder holder, final int position, @NonNull final Contacts model)
             {
-                holder.userNameTxt.setText(model.getName());     //holder is locally generated variable to store name of the user displayed in searched
+                holder.userNameTxt.setText(model.getName());//holder is locally generated variable to store name of the user displayed in searched
                 Picasso.get().load(model.getImage()).into(holder.profileImageView); //picasso method is accessing and displaying the dp
+                holder.userNameTxt.setVisibility(View.VISIBLE);
                 holder.itemView.setOnClickListener(new View.OnClickListener()
                 {
                     @Override
