@@ -35,6 +35,8 @@ public class MessageActivity extends AppCompatActivity {
     private String currentUserID;
 
     String username,profileImage;
+    private String senderUserId="",recieverUserId="";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,29 +54,35 @@ public class MessageActivity extends AppCompatActivity {
             }
         });
 
+        fuser=FirebaseAuth.getInstance().getCurrentUser();
+
+
         msgProfileImage=findViewById(R.id.msg_profile_image);
         msgUsername=findViewById(R.id.msg_username);
         intent= getIntent();
 
-        mAuth =FirebaseAuth.getInstance();
-        currentUserID = mAuth.getCurrentUser().getUid();
-        String userID=intent.getStringExtra("userid");
+
+        recieverUserId = getIntent().getExtras().get("visit_user_id").toString();//we now have the userID from the last activity, now we can get the name and dp
+        userRef = FirebaseDatabase.getInstance().getReference().child("User");
+        senderUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         messagesRef= FirebaseDatabase.getInstance().getReference("Messages");
 
-        userRef=FirebaseDatabase.getInstance().getReference().child("User");
+
 
         final String listUserID=userRef.getKey();
 
-        userRef.child(listUserID).addValueEventListener(new ValueEventListener() {
+        userRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
-                    username = snapshot.child("Name").getValue().toString();
-                    profileImage = snapshot.child("image").getValue().toString();
+                    profileImage = snapshot.child(recieverUserId).child("image").getValue().toString();
+                    username = snapshot.child(recieverUserId).child("Name").getValue().toString();
+                    //NOW we have retrieved the Name and profile image from the database using snapshot
 
+                    //NEXT we will have to show this data to user in the CallingActivity
                     msgUsername.setText(username);
-                    Picasso.get().load(profileImage).into(msgProfileImage);
+                    Picasso.get().load(profileImage).placeholder(R.drawable.profile_image).into(msgProfileImage);
 
                 }
             }
