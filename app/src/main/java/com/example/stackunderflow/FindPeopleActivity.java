@@ -138,7 +138,7 @@ public class FindPeopleActivity extends AppCompatActivity {
     public static class FindFriendsViewHolder extends RecyclerView.ViewHolder
     {
         TextView userNameTxt;
-        Button videoCallBtn;
+        Button videoCallBtn,msgBtn;
         ImageView profileImageView;
         RelativeLayout cardView1;
 
@@ -150,9 +150,10 @@ public class FindPeopleActivity extends AppCompatActivity {
                  videoCallBtn = itemView.findViewById(R.id.call_btn);
                  profileImageView = itemView.findViewById(R.id.image_contact);
                  cardView1 = itemView.findViewById(R.id.card_view1);
+                 msgBtn=itemView.findViewById(R.id.msg_button);
 
                  videoCallBtn.setVisibility(View.GONE); //videocall option wont be shown when the user is being displayed as a result of search
-
+                 msgBtn.setVisibility(View.GONE);
              }
     }
 }
