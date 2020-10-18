@@ -150,6 +150,16 @@ public class MainActivity extends AppCompatActivity {
                                 startActivity(callingIntent);                               //so that we will see who we have called
                             }
                         });
+
+                        holder.MsgBtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent callingIntent = new Intent(MainActivity.this,MessageActivity.class);
+                                callingIntent.putExtra("visit_user_id",listUserID); //here we are sending the listUserID to the MessageActivity
+                                startActivity(callingIntent);
+                            }
+                        });
+
                     }
 
                     @Override
@@ -200,7 +210,7 @@ public class MainActivity extends AppCompatActivity {
     public static class ContactsViewHolder extends RecyclerView.ViewHolder {
 
         TextView userNameText;
-        Button callBtn;
+        Button callBtn,MsgBtn;
         ImageView profileImageView;
 
 
@@ -210,6 +220,7 @@ public class MainActivity extends AppCompatActivity {
             userNameText=itemView.findViewById(R.id.name_contact);
             callBtn=itemView.findViewById(R.id.call_btn);
             profileImageView=itemView.findViewById(R.id.image_contact);
+            MsgBtn=itemView.findViewById(R.id.msg_button);
 
 
         }
