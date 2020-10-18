@@ -154,9 +154,9 @@ public class MainActivity extends AppCompatActivity {
                         holder.MsgBtn.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Intent callingIntent = new Intent(MainActivity.this,MessageActivity.class);
-                                callingIntent.putExtra("visit_user_id",listUserID); //here we are sending the listUserID to the MessageActivity
-                                startActivity(callingIntent);
+                                Intent messageIntent = new Intent(MainActivity.this,MessageActivity.class);
+                                messageIntent.putExtra("visit_user_id",listUserID); //here we are sending the listUserID to the MessageActivity
+                                startActivity(messageIntent);
                             }
                         });
 
