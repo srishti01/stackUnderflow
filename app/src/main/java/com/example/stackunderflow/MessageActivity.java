@@ -66,7 +66,7 @@ public class MessageActivity extends AppCompatActivity {
         userRef = FirebaseDatabase.getInstance().getReference().child("User");
         senderUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        messagesRef= FirebaseDatabase.getInstance().getReference("Messages");
+        messagesRef= FirebaseDatabase.getInstance().getReference("Chats");  //we create new child for Chats
 
 
 
@@ -80,7 +80,7 @@ public class MessageActivity extends AppCompatActivity {
                     username = snapshot.child(recieverUserId).child("Name").getValue().toString();
                     //NOW we have retrieved the Name and profile image from the database using snapshot
 
-                    //NEXT we will have to show this data to user in the CallingActivity
+                    //NEXT we will have to show this data to user in the MessageActivity
                     msgUsername.setText(username);
                     Picasso.get().load(profileImage).placeholder(R.drawable.profile_image).into(msgProfileImage);
 
