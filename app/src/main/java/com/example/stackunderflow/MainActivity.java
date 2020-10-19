@@ -84,6 +84,12 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(settingsIntent);
                     break;
                 }
+                case R.id.navigation_chats: {
+                    //Setting Intent to show what would happen when notification icon is pressed
+                    Intent chatsIntent = new Intent(MainActivity.this, ChatsActivity.class);
+                    startActivity(chatsIntent);
+                    break;
+                }
                 case R.id.navigation_notifications: {
                     Intent notificationIntent = new Intent(MainActivity.this, NotificationActivity.class);
                     startActivity(notificationIntent);
