@@ -12,6 +12,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.auth.data.model.User;
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,7 +26,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 import com.bumptech.glide.Glide;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -46,6 +50,10 @@ public class MessageActivity extends AppCompatActivity {
     private ImageButton btn_send;
     private EditText text_send;
 
+    MessageAdapter messageAdapter;
+    List<Chat> mchat;
+
+    RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +70,12 @@ public class MessageActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        recyclerView = findViewById(R.id.recycler_view);
+        recyclerView.setHasFixedSize(true);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+        linearLayoutManager.setStackFromEnd(true);
+        recyclerView.setLayoutManager(linearLayoutManager);
 
         fuser=FirebaseAuth.getInstance().getCurrentUser();
 
@@ -108,6 +122,7 @@ public class MessageActivity extends AppCompatActivity {
                     msgUsername.setText(username);
                     Picasso.get().load(profileImage).placeholder(R.drawable.profile_image).into(msgProfileImage);
 
+                    readMesagges(fuser.getUid(), userid, user.getImageURL());
                 }
             }
             @Override
@@ -128,5 +143,37 @@ public class MessageActivity extends AppCompatActivity {
 
         reference.child("Chats").push().setValue(hashMap);
 
+    }
+
+    private void readMesagges(String myid, String userid, String imageurl)
+    {
+        mchat = new ArrayList<>();
+
+        userRef = FirebaseDatabase.getInstance().getReference("Chats");
+        userRef.addValueEventListener(new ValueEventListener(){
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                mchat.clear();
+                for(DataSnapshot snapshot1 : snapshot.getChildren())
+                {
+                    Chat chat = snapshot.getValue(Chat.class);
+                    if(chat.getReceiver().equals(myid) && chat.getSender().equals(userid)||chat.getReceiver().equals(userid)&&
+                    chat.getSender().equals(myid))
+                    {
+                        mchat.add(chat);
+                    }
+
+                    messageAdapter = new MessageAdapter(MessageActivity.this, mchat, imageurl);
+                    recyclerView.setAdapter(messageAdapter);
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 }
