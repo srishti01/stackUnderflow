@@ -71,9 +71,10 @@ public class MessageActivity extends AppCompatActivity {
             }
         });
 
-        recyclerView = findViewById(R.id.recycler_view);
+        recyclerView = findViewById(R.id.recycler_view_msg);
         recyclerView.setHasFixedSize(true);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());  //to set the layout for chat between users
         linearLayoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(linearLayoutManager);
 
@@ -100,10 +101,10 @@ public class MessageActivity extends AppCompatActivity {
         });
 
 
-        recieverUserId = getIntent().getExtras().get("visit_user_id").toString();//we now have the userID from the last activity, now we can get the name and dp
+        recieverUserId = getIntent().getExtras().get("visit_user_id").toString();//we now have the userID of the receiver from the last activity, now we can get the name and dp
         userRef = FirebaseDatabase.getInstance().getReference().child("User");
-        senderUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
+        senderUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();   //we get the userid of the sender
         messagesRef= FirebaseDatabase.getInstance().getReference("Chats");  //we create new child for Chats
 
 
@@ -122,7 +123,9 @@ public class MessageActivity extends AppCompatActivity {
                     msgUsername.setText(username);
                     Picasso.get().load(profileImage).placeholder(R.drawable.profile_image).into(msgProfileImage);
 
-                    readMesagges(fuser.getUid(), userid, user.getImageURL());
+                    Contacts user=snapshot.getValue(Contacts.class);   //get snapshot as Contacts class(we defined)
+
+                    readMesagges(senderUserId, recieverUserId,user.getImage());   //call the method to read msg from database using receiverid and senderid
                 }
             }
             @Override
@@ -149,21 +152,22 @@ public class MessageActivity extends AppCompatActivity {
     {
         mchat = new ArrayList<>();
 
-        userRef = FirebaseDatabase.getInstance().getReference("Chats");
+        userRef = FirebaseDatabase.getInstance().getReference("Chats");  //refernce to chats child of database
         userRef.addValueEventListener(new ValueEventListener(){
 
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 mchat.clear();
-                for(DataSnapshot snapshot1 : snapshot.getChildren())
+                for(DataSnapshot snapshot1 : snapshot.getChildren())    //run loop to show all the msgs
                 {
-                    Chat chat = snapshot.getValue(Chat.class);
-                    if(chat.getReceiver().equals(myid) && chat.getSender().equals(userid)||chat.getReceiver().equals(userid)&&
-                    chat.getSender().equals(myid))
+                    Chat chat = snapshot1.getValue(Chat.class);
+                    if((chat.getReceiver().equals(myid) && chat.getSender().equals(userid)) || (chat.getReceiver().equals(userid)&&
+                    chat.getSender().equals(myid)))
                     {
                         mchat.add(chat);
                     }
 
+                    //set adapter for display
                     messageAdapter = new MessageAdapter(MessageActivity.this, mchat, imageurl);
                     recyclerView.setAdapter(messageAdapter);
 
