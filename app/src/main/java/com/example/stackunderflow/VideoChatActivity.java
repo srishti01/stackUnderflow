@@ -5,12 +5,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import com.opentok.android.Session;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -49,6 +51,11 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
     private Publisher mPublisher;
     private Subscriber mSubscriber;
 
+    private AudioManager audioManager;
+    private ImageView micOn,micOff,cameraOn,cameraOff;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +65,15 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
         usersRef = FirebaseDatabase.getInstance().getReference().child("User");
 
         closeVideoChatBtn = findViewById(R.id.close_video_chat_btn);
+
+        micOn = findViewById(R.id.mic_on);
+        micOff=findViewById(R.id.mic_off);
+
+        cameraOn=findViewById(R.id.camera_on);
+        cameraOff=findViewById(R.id.camera_off);
+
+        audioManager = (AudioManager)getSystemService(AUDIO_SERVICE);
+
 
         closeVideoChatBtn.setOnClickListener(new View.OnClickListener()
         {
@@ -126,6 +142,34 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
         });
 
         requestPermissions();
+
+        micOn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setMicroPhoneMute();
+            }
+        });
+
+        micOff.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setMicroPhoneMute();
+            }
+        });
+
+        cameraOn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setCameraOff();
+            }
+        });
+
+        cameraOff.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setCameraOn();
+            }
+        });
     }
 
     @Override
@@ -256,5 +300,37 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
     @Override
     public void onError(com.opentok.android.Session session, OpentokError opentokError) {
         Log.i(LOG_TAG,"Stream Error");
+    }
+
+    //MUTE AUDIO
+    //following is the method to set the user's audio to mute
+    public void setMicroPhoneMute(){
+        boolean wasMuted = audioManager.isMicrophoneMute();
+        if(wasMuted)
+        {
+            audioManager.setMicrophoneMute(false);
+            micOn.setVisibility(View.VISIBLE);
+            micOff.setVisibility(View.GONE);
+        }
+        else
+            {
+            audioManager.setMicrophoneMute(true);
+            micOn.setVisibility(View.GONE);
+            micOff.setVisibility(View.VISIBLE);
+
+        }
+    }
+
+    public  void setCameraOff()
+    {
+        mPublisher.setPublishVideo(false);
+        cameraOn.setVisibility(View.GONE);
+        cameraOff.setVisibility(View.VISIBLE);
+    }
+    public void setCameraOn()
+    {
+        mPublisher.setPublishVideo(true);
+        cameraOn.setVisibility(View.VISIBLE);
+        cameraOff.setVisibility(View.GONE);
     }
 }

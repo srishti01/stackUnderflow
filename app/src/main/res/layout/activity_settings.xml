@@ -21,9 +21,10 @@
         android:id="@+id/username_settings"
         android:drawableLeft="@drawable/ic_write_username"
         android:layout_below="@+id/settings_profile_image"
-        android:layout_marginLeft="16dp"
+        android:layout_marginLeft="26dp"
         android:hint="Username"
-        android:layout_marginRight="16dp"
+        android:drawableTint="#000"
+        android:layout_marginRight="26dp"
         android:layout_marginTop="35dp"/>
     <EditText
         android:layout_width="match_parent"
@@ -31,9 +32,10 @@
         android:id="@+id/bio_settings"
         android:drawableLeft="@drawable/ic_write_bio"
         android:layout_below="@+id/username_settings"
-        android:layout_marginLeft="16dp"
+        android:drawableTint="#000"
+        android:layout_marginLeft="26dp"
         android:hint="Bio"
-        android:layout_marginRight="16dp"
+        android:layout_marginRight="26dp"
         android:layout_marginTop="35dp"/>
     <Button
         android:layout_width="match_parent"
