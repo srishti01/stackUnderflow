@@ -3,8 +3,10 @@ package com.example.stackunderflow;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -60,6 +62,8 @@ public class MessageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
 
+        final Vibrator vibrator = (Vibrator) MessageActivity.this.getSystemService(Context.VIBRATOR_SERVICE);//initializing vibrator
+
         Toolbar toolbar=findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
@@ -68,6 +72,7 @@ public class MessageActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
+
             }
         });
 
@@ -90,6 +95,9 @@ public class MessageActivity extends AppCompatActivity {
         btn_send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                vibrator.vibrate(100); //vibration on hitting send button
+
                 String msg = text_send.getText().toString();    //here we've stored the msg typed
                 if(!msg.isEmpty()){
                     sendMessage(senderUserId,recieverUserId,msg);   //calling sendMessage method if the string is not empty

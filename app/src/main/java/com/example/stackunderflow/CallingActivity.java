@@ -3,9 +3,11 @@ package com.example.stackunderflow;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -52,11 +54,14 @@ public class CallingActivity extends AppCompatActivity {
         cancelCallBtn = (ImageView) findViewById(R.id.close_video_chat_btn);
         acceptCallBtn = (ImageView) findViewById(R.id.make_call);
 
+        final Vibrator vibrator = (Vibrator) CallingActivity.this.getSystemService(Context.VIBRATOR_SERVICE);//initializing vibrator
+
         acceptCallBtn.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
+                vibrator.vibrate(100);
                 mMediaPlayer.stop();
 
                 final HashMap<String,Object> callingPickupMap= new HashMap<>();
@@ -85,6 +90,7 @@ public class CallingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v)
             {
+                vibrator.vibrate(100);
                 mMediaPlayer.stop();
 
                 checker="clicked";  //value to check if the  button is clicked

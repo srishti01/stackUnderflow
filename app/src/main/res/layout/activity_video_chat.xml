@@ -10,22 +10,22 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <FrameLayout
+            android:id="@+id/subscriber_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/colorPrimary"
-            android:id="@+id/subscriber_container"
-            >
+            android:background="@color/colorPrimary">
 
             <FrameLayout
+                android:id="@+id/publisher_container"
                 android:layout_width="90dp"
                 android:layout_height="120dp"
-                android:id="@+id/publisher_container"
-                android:layout_gravity="bottom|end"
-                android:background="@color/color5"
+                android:layout_gravity="bottom"
                 android:layout_margin="10dp"
+                android:background="@drawable/profile_image"
 
-            >
+                >
 
             </FrameLayout>
         </FrameLayout>
@@ -37,7 +37,29 @@
             android:layout_height="80dp"
             android:src="@drawable/cancel_call"
             android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
             android:layout_margin="20dp"
             >
 </ImageView>
+
+    <ImageButton
+        android:id="@+id/mute_btn"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:background="@drawable/mute_button"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="490dp"
+        android:layout_marginRight="30dp"
+        />
+
+    <ImageButton
+        android:id="@+id/video_off_btn"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:background="@drawable/video_off"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="440dp"
+        android:layout_marginRight="30dp"
+        />
+
 </RelativeLayout>

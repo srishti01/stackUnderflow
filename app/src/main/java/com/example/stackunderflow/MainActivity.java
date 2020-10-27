@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 
 import com.google.firebase.database.DataSnapshot;
@@ -33,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     BottomNavigationView navView;
 
     RecyclerView myContactsList;     //to show contact list when find_people button is clicked
-    ImageView findPeopleBtn;
+   // ImageView findPeopleBtn;
 
     private DatabaseReference contactsRef, usersRef;
     private FirebaseAuth mAuth;
@@ -55,17 +56,27 @@ public class MainActivity extends AppCompatActivity {
         navView.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
 
         myContactsList=findViewById(R.id.contact_list);
-        findPeopleBtn=findViewById(R.id.find_people_btn);
+       // findPeopleBtn=findViewById(R.id.find_people_btn);
         myContactsList.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         usersRef=FirebaseDatabase.getInstance().getReference().child("User");
 
-        findPeopleBtn.setOnClickListener(new View.OnClickListener() {            //to show contact list when find_people button is clicked
+        FloatingActionButton floatingActionButton= findViewById(R.id.floating_Btn);
+
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {        //to show contact list when floating button is clicked
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 Intent findPeople = new Intent(MainActivity.this,FindPeopleActivity.class);
                 startActivity(findPeople);
             }
         });
+
+//        findPeopleBtn.setOnClickListener(new View.OnClickListener() {            //to show contact list when find_people button is clicked
+//            @Override
+//            public void onClick(View view) {
+//                Intent findPeople = new Intent(MainActivity.this,FindPeopleActivity.class);
+//                startActivity(findPeople);
+//            }
+//        });
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -200,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
                 if(!snapshot.exists())
                 {
                     Intent settingsIntent = new Intent(MainActivity.this,SettingsActivity.class); //If the user does not exist
-                                                                                                        //he/she will not be able to go to mainActivity
+                                                                                                        // he/she will not be able to go to mainActivity
                     startActivity(settingsIntent);
                     finish();
                 }

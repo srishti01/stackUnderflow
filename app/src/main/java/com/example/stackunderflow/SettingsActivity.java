@@ -5,9 +5,11 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -61,6 +63,8 @@ public class SettingsActivity extends AppCompatActivity {
         mBio = findViewById(R.id.bio_settings);
         progressDialog = new ProgressDialog(this);
 
+        final Vibrator vibrator = (Vibrator) SettingsActivity.this.getSystemService(Context.VIBRATOR_SERVICE);//initializing vibrator
+
         //now We will make and intent so that user can set DP by going to the gallery
         mProfileImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,6 +80,7 @@ public class SettingsActivity extends AppCompatActivity {
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                vibrator.vibrate(100);
                 saveUserData();
             }
         });
