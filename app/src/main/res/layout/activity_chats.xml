@@ -13,6 +13,7 @@
 
         <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
+            android:background="@drawable/toolbar_colours"
             android:layout_height="60dp">
 
             <RelativeLayout
