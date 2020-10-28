@@ -63,6 +63,7 @@
             android:layout_marginBottom="12dp"
             android:layout_toRightOf="@+id/call_btn"
             android:background="@drawable/custom_button"
+
             android:drawableTop="@drawable/ic_baseline_chat"
             android:gravity="center"
             android:padding="6dp" />

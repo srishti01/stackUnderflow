@@ -57,10 +57,14 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
     private Subscriber mSubscriber;
 
     private AudioManager audioManager;
+
     private ImageButton muteButton,videoOffButton;
 
     private String receiverUserImage="";
     private String senderUserImage="";
+    private ImageView micOn,micOff,cameraOn,cameraOff;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +80,15 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
         muteButton = findViewById(R.id.mute_btn);
         audioManager = (AudioManager)getSystemService(AUDIO_SERVICE);
         videoOffButton = (ImageButton) findViewById(R.id.video_off_btn);
+
+        micOn = findViewById(R.id.mic_on);
+        micOff=findViewById(R.id.mic_off);
+
+        cameraOn=findViewById(R.id.camera_on);
+        cameraOff=findViewById(R.id.camera_off);
+
+        audioManager = (AudioManager)getSystemService(AUDIO_SERVICE);
+
 
         closeVideoChatBtn.setOnClickListener(new View.OnClickListener()
         {
@@ -148,6 +161,7 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
 
         requestPermissions();
 
+
         muteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -161,6 +175,32 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
             public void onClick(View v) {
                 turnOffVideo();
                 vibrator.vibrate(80);
+
+        micOn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setMicroPhoneMute();
+            }
+        });
+
+        micOff.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setMicroPhoneMute();
+            }
+        });
+
+        cameraOn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setCameraOff();
+            }
+        });
+
+        cameraOff.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setCameraOn();
             }
         });
     }
@@ -301,17 +341,30 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
     public void setMicroPhoneMute(){
         boolean wasMuted = audioManager.isMicrophoneMute();
         if(wasMuted)
+        {
             audioManager.setMicrophoneMute(false);
+            micOn.setVisibility(View.VISIBLE);
+            micOff.setVisibility(View.GONE);
+        }
         else
+            {
             audioManager.setMicrophoneMute(true);
+            micOn.setVisibility(View.GONE);
+            micOff.setVisibility(View.VISIBLE);
+
+        }
     }
 
-    //VIDEO OFF, AUDIO ONLY
-    //we will now try to show the publisher and subscriber profile image instead of video
-    private void turnOffVideo() {
-        mSession.unpublish(mPublisher);
-        mSession.unsubscribe(mSubscriber);
-
-        //mSubscriberViewController.addView();
+    public  void setCameraOff()
+    {
+        mPublisher.setPublishVideo(false);
+        cameraOn.setVisibility(View.GONE);
+        cameraOff.setVisibility(View.VISIBLE);
+    }
+    public void setCameraOn()
+    {
+        mPublisher.setPublishVideo(true);
+        cameraOn.setVisibility(View.VISIBLE);
+        cameraOff.setVisibility(View.GONE);
     }
 }

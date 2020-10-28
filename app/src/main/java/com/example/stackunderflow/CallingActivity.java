@@ -51,7 +51,7 @@ public class CallingActivity extends AppCompatActivity {
 
         nameContact = (TextView) findViewById(R.id.name_calling);
         profileImage = (ImageView) findViewById(R.id.profile_image_calling);
-        cancelCallBtn = (ImageView) findViewById(R.id.close_video_chat_btn);
+        cancelCallBtn = (ImageView) findViewById(R.id.cancel_call);
         acceptCallBtn = (ImageView) findViewById(R.id.make_call);
 
         final Vibrator vibrator = (Vibrator) CallingActivity.this.getSystemService(Context.VIBRATOR_SERVICE);//initializing vibrator
