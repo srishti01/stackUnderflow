@@ -8,4 +8,6 @@
     <color name="color6">#932885</color>
     <color name="color7">#268FBF</color>
     <color name="white">#F3F0F0</color>
+    <color name="lightBlue">#02F7FF</color>
+    <color name="darkBlue">#0066FF</color>
 </resources>

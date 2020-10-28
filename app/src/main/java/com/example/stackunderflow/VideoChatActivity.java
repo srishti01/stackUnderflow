@@ -4,11 +4,16 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+
+import com.opentok.android.AudioDeviceManager;
 import com.opentok.android.Session;
+
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -52,6 +57,11 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
     private Subscriber mSubscriber;
 
     private AudioManager audioManager;
+
+    private ImageButton muteButton,videoOffButton;
+
+    private String receiverUserImage="";
+    private String senderUserImage="";
     private ImageView micOn,micOff,cameraOn,cameraOff;
 
 
@@ -61,10 +71,15 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_chat);
 
+        final Vibrator vibrator = (Vibrator) VideoChatActivity.this.getSystemService(Context.VIBRATOR_SERVICE);//initializing vibrator
+
         userID= FirebaseAuth.getInstance().getCurrentUser().getUid();
         usersRef = FirebaseDatabase.getInstance().getReference().child("User");
 
         closeVideoChatBtn = findViewById(R.id.close_video_chat_btn);
+        muteButton = findViewById(R.id.mute_btn);
+        audioManager = (AudioManager)getSystemService(AUDIO_SERVICE);
+        videoOffButton = (ImageButton) findViewById(R.id.video_off_btn);
 
         micOn = findViewById(R.id.mic_on);
         micOff=findViewById(R.id.mic_off);
@@ -79,11 +94,14 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
         {
             @Override
             public void onClick(View v) {
+
+                vibrator.vibrate(100);
+
                 usersRef.addValueEventListener(new ValueEventListener()
                 {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if(snapshot.child("userID").hasChild("Ringing"))
+                        if(snapshot.child(userID).hasChild("Ringing"))
                         {
                             usersRef.child(userID).child("Ringing").removeValue();
                             if(mPublisher!=null)
@@ -100,7 +118,7 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
                             finish();
 
                         }
-                        if(snapshot.child("userID").hasChild("Calling"))
+                        if(snapshot.child(userID).hasChild("Calling"))
                         {
                             usersRef.child(userID).child("Calling").removeValue();
                             if(mPublisher!=null)
@@ -143,6 +161,21 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
 
         requestPermissions();
 
+
+        muteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setMicroPhoneMute();
+                vibrator.vibrate(80);
+            }
+        });
+
+        videoOffButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                turnOffVideo();
+                vibrator.vibrate(80);
+
         micOn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -172,6 +205,7 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
         });
     }
 
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
     {
@@ -183,7 +217,7 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
     @AfterPermissionGranted(RC_VIDEO_APP_PERM)    // to request permission for camera and audio
     private void requestPermissions()
     {
-        String[] perms = {Manifest.permission.INTERNET , Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO};
+        String[] perms = {Manifest.permission.INTERNET , Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO,Manifest.permission.VIBRATE};
 
         if(EasyPermissions.hasPermissions(this,perms))
         {

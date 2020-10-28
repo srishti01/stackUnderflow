@@ -6,14 +6,28 @@
     android:layout_height="match_parent"
     tools:context=".RegistrationActivity">
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/registration_activity_background"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Verify Phone Number"
+        android:layout_marginTop="59dp"
+        android:layout_marginLeft="25dp"
+        android:textColor="@color/white"
+        android:textSize="27sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/textview1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="260dp"
-        android:layout_marginBottom="25dp"></TextView>
+        android:layout_marginTop="290dp"
+        android:layout_marginBottom="25dp"/>
 
     <RelativeLayout
         android:id="@+id/phoneAuth"
@@ -25,19 +39,15 @@
         android:padding="8dp">
 
         <LinearLayout
+            android:id="@+id/linear_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Phone Number:"
-                android:textColor="@android:color/primary_text_light_nodisable"
-                android:textSize="24sp"
-                android:textStyle="normal" />
+
 
             <LinearLayout
+                android:id="@+id/layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical">
@@ -54,7 +64,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:backgroundTint="@android:color/white"
-                    android:hint="10 digits phone number"
+                    android:hint="Enter Phone Number"
                     android:inputType="phone"
                     android:singleLine="true"
                     android:textColor="@android:color/primary_text_light_nodisable"
@@ -87,23 +97,33 @@
 
     <Button
         android:id="@+id/continueNextButton"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="50dp"
         android:layout_below="@+id/codeText"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_marginStart="160dp"
+        android:layout_marginStart="130dp"
         android:layout_marginLeft="160dp"
         android:layout_marginTop="30dp"
-        android:layout_marginEnd="164dp"
+        android:layout_marginEnd="130dp"
         android:layout_marginRight="164dp"
-        android:background="@color/color5"
-        android:text="Continue"
+        android:background="@drawable/custom_button"
+        android:text="Verify"
         android:textAllCaps="false"
         android:textColor="@android:color/white"
-        android:textSize="15dp" />
-
+        android:textSize="15dp"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="We will send an OTP to this number"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:paddingBottom="15dp"
+        android:textColor="#8A8989"
+        />
+   
 
 </RelativeLayout>

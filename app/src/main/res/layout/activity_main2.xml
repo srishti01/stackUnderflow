@@ -6,14 +6,14 @@
     android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar_layout_contacts"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/appbar_layout_contacts">
+        >
 
         <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
-            android:layout_height="55dp"
-            >
+            android:layout_height="55dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -21,21 +21,21 @@
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="33dp"
+                    android:layout_centerVertical="true"
                     android:text="contacts"
                     android:textAllCaps="true"
                     android:textSize="20dp"
-                    android:textStyle="bold"
-                    android:layout_centerVertical="true"/>
+                    android:textStyle="bold" />
 
-                <ImageView
-                    android:layout_width="38dp"
-                    android:layout_height="38dp"
-                    android:layout_alignParentRight="true"
-                   android:layout_marginRight="20dp"
-                    android:src="@drawable/ic_add_person_2"
-                    android:focusableInTouchMode="true"
-                    android:id="@+id/find_people_btn"/>
+<!--                <ImageView-->
+<!--                    android:id="@+id/find_people_btn"-->
+<!--                    android:layout_width="38dp"-->
+<!--                    android:layout_height="38dp"-->
+<!--                    android:layout_alignParentRight="true"-->
+<!--                    android:layout_marginRight="20dp"-->
+<!--                    android:focusableInTouchMode="true"-->
+<!--                    android:src="@drawable/ic_add_person_2" />-->
             </RelativeLayout>
 
 
@@ -44,11 +44,13 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/contact_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/contact_list"
+        android:layout_above="@id/nav_view"
         android:layout_below="@id/appbar_layout_contacts"
-        android:layout_above="@id/nav_view"/>
+        android:background="@drawable/gradient_background_without_roundcorners"
+        />
 
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -63,9 +65,20 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
+        app:menu="@menu/bottom_nav_menu"
+        />
 
-        app:menu="@menu/bottom_nav_menu" />
-    
-
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floating_Btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_add_person_2"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="70dp"
+        android:layout_marginRight="15dp"
+        android:backgroundTint="#00F7FF"
+        />
 
 </RelativeLayout>
+

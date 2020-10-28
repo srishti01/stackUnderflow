@@ -1,6 +1,8 @@
 package com.example.stackunderflow;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -56,6 +58,8 @@ public class ProfileActivity extends AppCompatActivity {
         name_profile.setText(receiverUserName);  //name_profile textbox text is being set to the username
 
         manageClickEvents() ;     //after the results of search are displayed and a profile has been clicked upon,this method is called
+
+        final Vibrator vibrator = (Vibrator) ProfileActivity.this.getSystemService(Context.VIBRATOR_SERVICE);//initializing vibrator
     }
 
     private void manageClickEvents() {
@@ -126,6 +130,9 @@ public class ProfileActivity extends AppCompatActivity {
             add_friend.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    final Vibrator vibrator = (Vibrator) ProfileActivity.this.getSystemService(Context.VIBRATOR_SERVICE);//initializing vibrator
+                    vibrator.vibrate(80);
+
                     if(currentState.equals("new"))
                     {
                         SendFriendRequest();       //only when currentstate is new ie no frnd request has been sent or recieved before,
@@ -142,6 +149,7 @@ public class ProfileActivity extends AppCompatActivity {
                     {
                         CancelFriendRequest();
                     }
+
                 }
             });
         }
