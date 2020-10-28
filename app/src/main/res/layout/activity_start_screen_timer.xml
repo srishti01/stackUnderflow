@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg1"
+    tools:context=".StartScreenTimer">
+
+    <TextView
+        android:id="@+id/Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="35dp"
+        android:layout_marginTop="80dp"
+        android:text="AmneSamne"
+        android:textColor="#ffff"
+        android:textSize="70sp"
+        android:fontFamily="@font/atma_light"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/Connect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_alignStart="@+id/Title"
+        android:layout_alignLeft="@+id/Title"
+        android:layout_alignTop="@+id/Title"
+        android:layout_marginTop="100dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="40dp"
+        android:layout_marginBottom="450dp"
+        android:text="We connect you"
+        android:textColor="#ffff"
+        android:textSize="35sp" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/To"
+        android:text="to"
+        android:textColor="#ffff"
+        android:textSize="35sp"
+        android:layout_alignLeft="@+id/Connect"
+        android:layout_alignStart="@+id/Connect"
+        android:layout_marginLeft="100dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="400dp"
+        android:layout_alignTop="@+id/Connect"
+        android:layout_marginTop="50dp"
+        />
+
+    <TextView
+        android:id="@+id/Heart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/To"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="70dp"
+        android:layout_marginTop="375dp"
+        android:layout_marginBottom="70dp"
+        android:text="YOUR HEART"
+        android:textColor="#ffff"
+        android:fontFamily="@font/euphoria_script"
+        android:textSize="45sp" />
+
+</RelativeLayout>
