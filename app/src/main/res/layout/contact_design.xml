@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:elevation="20dp"
     android:layout_marginRight="27dp"
     android:layout_marginLeft="27dp"
-    android:layout_marginTop="20dp">
+    android:layout_marginTop="20dp"
+    app:cardCornerRadius="30dp">
 
     <RelativeLayout
         android:id="@+id/card_view1"
@@ -36,34 +37,35 @@
             android:layout_marginTop="10dp"/>
 
         <Button
-            android:layout_width="80dp"
-            android:layout_height="40dp"
             android:id="@+id/call_btn"
-            android:layout_marginTop="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_below="@+id/name_contact"
             android:layout_marginLeft="80dp"
+            android:layout_marginTop="0dp"
             android:layout_marginBottom="12dp"
-            android:background="@color/colorAccent"
-            android:drawableTint="#000000"
-            android:padding="6dp"
-            android:gravity="center"
+            android:background="@drawable/custom_button"
             android:drawableTop="@drawable/ic_vidio_call2"
-            android:layout_below="@+id/name_contact"/>
+            android:drawableTint="#000000"
+            android:gravity="center"
+            android:padding="6dp"
+
+            />
 
         <Button
             android:id="@+id/msg_button"
-            android:layout_width="80dp"
+            android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_below="@id/name_contact"
-            android:layout_toRightOf="@+id/call_btn"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="12dp"
-            android:layout_marginLeft="30dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="1dp"
             android:layout_marginRight="80dp"
-            android:background="@color/colorPrimary"
+            android:layout_marginBottom="12dp"
+            android:layout_toRightOf="@+id/call_btn"
+            android:background="@drawable/custom_button"
             android:drawableTop="@drawable/ic_baseline_chat"
-            android:padding="6dp"
-            android:gravity="center"/>
-
+            android:gravity="center"
+            android:padding="6dp" />
 
 
     </RelativeLayout>

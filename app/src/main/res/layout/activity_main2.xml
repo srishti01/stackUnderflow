@@ -8,7 +8,8 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar_layout_contacts"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        >
 
         <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
@@ -47,7 +48,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/nav_view"
-        android:layout_below="@id/appbar_layout_contacts" />
+        android:layout_below="@id/appbar_layout_contacts"
+        android:background="@drawable/gradient_background_without_roundcorners"
+        />
 
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -62,8 +65,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-
-        app:menu="@menu/bottom_nav_menu" />
+        app:menu="@menu/bottom_nav_menu"
+        />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floating_Btn"
@@ -74,7 +77,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginBottom="70dp"
         android:layout_marginRight="15dp"
-        android:backgroundTint="#4FC9E8"
+        android:backgroundTint="#00F7FF"
         />
 
 </RelativeLayout>
