@@ -13,35 +13,60 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/colorPrimary"
+            android:background="@drawable/light_blue"
             android:id="@+id/subscriber_container"
             >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Connecting..."
+                android:id="@+id/Connecting"
+                android:textSize="40sp"
+                android:textColor="@color/colorPrimaryDark"
+                android:layout_marginLeft="70dp"
+                android:layout_marginTop="300dp"
+                />
 
             <FrameLayout
                 android:layout_width="90dp"
                 android:layout_height="120dp"
                 android:id="@+id/publisher_container"
                 android:layout_gravity="top|end"
-                android:background="@color/color5"
+                android:background="@drawable/profile_image"
                 android:layout_margin="10dp"
-
-            >
+                >
 
 
             </FrameLayout>
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:outlineAmbientShadowColor="@color/colorPrimaryDark"
+                android:outlineSpotShadowColor="@color/colorPrimaryDark"
+                android:layout_marginTop="370dp"
+                android:layout_marginLeft="150dp"
+                android:max="100"
+                />
         </FrameLayout>
     </FrameLayout>
 
-        <ImageView
-            android:id="@+id/close_video_chat_btn"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:src="@drawable/cancel_call"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_margin="20dp"
-            >
-</ImageView>
+    <ImageView
+        android:id="@+id/close_video_chat_btn"
+        android:layout_width="75dp"
+        android:layout_height="71dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginBottom="20dp"
+        android:src="@drawable/cancel_call"></ImageView>
     <ImageButton
         android:id="@+id/mic_on"
         android:layout_width="48dp"

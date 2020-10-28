@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -26,6 +27,9 @@ import com.opentok.android.Publisher;
 import com.opentok.android.PublisherKit;
 import com.opentok.android.Stream;
 import com.opentok.android.Subscriber;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -54,7 +58,9 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
     private AudioManager audioManager;
     private ImageView micOn,micOff,cameraOn,cameraOff;
 
-
+    private ProgressBar progressBar;
+    private Timer timer;
+    int count=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +80,8 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
 
         audioManager = (AudioManager)getSystemService(AUDIO_SERVICE);
 
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        timer = new Timer();
 
         closeVideoChatBtn.setOnClickListener(new View.OnClickListener()
         {
@@ -83,7 +91,7 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
                 {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if(snapshot.child("userID").hasChild("Ringing"))
+                        if(snapshot.child(userID).hasChild("Ringing"))
                         {
                             usersRef.child(userID).child("Ringing").removeValue();
                             if(mPublisher!=null)
@@ -100,7 +108,7 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
                             finish();
 
                         }
-                        if(snapshot.child("userID").hasChild("Calling"))
+                        if(snapshot.child(userID).hasChild("Calling"))
                         {
                             usersRef.child(userID).child("Calling").removeValue();
                             if(mPublisher!=null)
@@ -258,6 +266,17 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
 
         mPublisherViewController.addView(mPublisher.getView());  //to get and display publisher video
 
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                count++;
+                progressBar.setProgress(count);
+                if(count==100)
+                    timer.cancel();
+            }
+        };
+        timer.schedule(timerTask,0,100);
+
         if(mPublisher.getView() instanceof GLSurfaceView)
         {
             ((GLSurfaceView) mPublisher.getView()).setZOrderOnTop(true);
@@ -277,6 +296,9 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
     @Override
     public void onStreamReceived(com.opentok.android.Session session, Stream stream) {
         Log.i(LOG_TAG,"Stream Received");
+
+        count=0;
+        progressBar.setVisibility(View.GONE);
 
         if(mSubscriber == null)
         {
@@ -313,7 +335,7 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
             micOff.setVisibility(View.GONE);
         }
         else
-            {
+        {
             audioManager.setMicrophoneMute(true);
             micOn.setVisibility(View.GONE);
             micOff.setVisibility(View.VISIBLE);

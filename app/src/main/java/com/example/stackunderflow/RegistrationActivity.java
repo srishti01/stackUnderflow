@@ -1,8 +1,10 @@
 package com.example.stackunderflow;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -49,6 +51,7 @@ public class RegistrationActivity extends AppCompatActivity {
         mAuth=FirebaseAuth.getInstance();
         mProgressBar=new ProgressDialog(this);
 
+        final Vibrator vibrator = (Vibrator) RegistrationActivity.this.getSystemService(Context.VIBRATOR_SERVICE);//initializing vibrator
         PhoneText=findViewById(R.id.phoneText);
         CodeText=findViewById(R.id.codeText);
         continueAndNextBtn=findViewById(R.id.continueNextButton);
@@ -60,6 +63,8 @@ public class RegistrationActivity extends AppCompatActivity {
         continueAndNextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                vibrator.vibrate(100);
+
                 if(continueAndNextBtn.getText().equals("Submit")|| checker.equals("Code Sent"))    //when the text on button changes to submit we will verify the code
                 {
                     String VerificationCode=CodeText.getText().toString();  //code verification
