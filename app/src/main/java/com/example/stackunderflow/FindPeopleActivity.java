@@ -24,8 +24,11 @@ import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 
@@ -36,6 +39,8 @@ public class FindPeopleActivity extends AppCompatActivity {
     private EditText searchET;
     private String str="";
     private DatabaseReference usersRef;
+
+    private String userName, profileImage ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,28 +105,59 @@ public class FindPeopleActivity extends AppCompatActivity {
             @Override
             protected void onBindViewHolder(@NonNull FindFriendsViewHolder holder, final int position, @NonNull final Contacts model)
             {
-                holder.userNameTxt.setText(model.getName());//holder is locally generated variable to store name of the user displayed in searched
-                Picasso.get().load(model.getImage()).into(holder.profileImageView); //picasso method is accessing and displaying the dp
-                holder.userNameTxt.setVisibility(View.VISIBLE);
-                holder.itemView.setOnClickListener(new View.OnClickListener()
-                {
+                final String listUserID=getRef(position).getKey();
+
+                usersRef.child(listUserID).addValueEventListener(new ValueEventListener() {
                     @Override
-                    public void onClick(View v)
+                    public void onDataChange(@NonNull DataSnapshot snapshot)
                     {
-                        //when some user from the search suggestions
-                        String visit_user_id = getRef(position).getKey();  //visit_user_id is storing the reference to the user that has been clicked upon
 
-                        Intent intent = new Intent(FindPeopleActivity.this, ProfileActivity.class);
-                        intent.putExtra("visit_user_id", visit_user_id );
-                        intent.putExtra("profile_image",model.getImage());
-                        intent.putExtra("profile_name", model.getName());
+                            userName = snapshot.child("Name").getValue().toString();
+                            profileImage = snapshot.child("image").getValue().toString();
 
-                        startActivity(intent); //profile activity is being started by giving information of user_id,image and name
+                            holder.userNameTxt.setText(userName);
+                            Picasso.get().load(profileImage).into(holder.profileImageView);
+
+                            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    //when some user from the search suggestions
+                                    String visit_user_id = getRef(position).getKey();  //visit_user_id is storing the reference to the user that has been clicked upon
+
+                                    Intent intent = new Intent(FindPeopleActivity.this, ProfileActivity.class);
+                                    intent.putExtra("visit_user_id", visit_user_id);
+                                    intent.putExtra("profile_image", model.getImage());
+                                    intent.putExtra("profile_name", model.getName());
+
+                                    startActivity(intent); //profile activity is being started by giving information of user_id,image and name
+                                }
+                            });
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
                     }
                 });
+//                holder.itemView.setOnClickListener(new View.OnClickListener()
+//                {
+//                    @Override
+//                    public void onClick(View v)
+//                    {
+//                        //when some user from the search suggestions
+//                        String visit_user_id = getRef(position).getKey();  //visit_user_id is storing the reference to the user that has been clicked upon
+//
+//                        Intent intent = new Intent(FindPeopleActivity.this, ProfileActivity.class);
+//                        intent.putExtra("visit_user_id", visit_user_id );
+//                        intent.putExtra("profile_image",model.getImage());
+//                        intent.putExtra("profile_name", model.getName());
+//
+//                        startActivity(intent); //profile activity is being started by giving information of user_id,image and name
+//                    }
+//                });
             }
-
-            @NonNull
+                    @NonNull
             @Override
             public FindFriendsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
             {

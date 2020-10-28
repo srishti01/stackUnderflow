@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#c6c6c6"
     tools:context=".MessageActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -15,6 +14,7 @@
         <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
             android:layout_height="55dp"
+            android:background="@drawable/toolbar_colours"
             android:id="@+id/toolbar">
             
             <de.hdodenhof.circleimageview.CircleImageView
@@ -28,8 +28,8 @@
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
                 android:id="@+id/msg_username"
+                android:textColor="@color/colorAccent"
                 android:textStyle="bold"
-                android:textColor="#fff"
                 android:text="username"
                 android:layout_marginLeft="25dp"
                 android:layout_marginStart="25dp" />
@@ -48,6 +48,7 @@
         android:id="@+id/recycler_view_msg"
         android:layout_below="@+id/appbar_layout_msg"
         android:layout_above="@+id/bottom_msg"
+        android:background="@color/msg_bg"
         />
 
     <RelativeLayout
@@ -67,7 +68,7 @@
             android:background="@android:color/transparent"
             android:hint=" Write Message..."
             />
-        
+
         <ImageButton
             android:layout_width="40dp"
             android:layout_height="40dp"

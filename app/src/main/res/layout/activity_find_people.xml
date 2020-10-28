@@ -13,6 +13,7 @@
 
         <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
+            android:background="@drawable/toolbar_colours"
             android:layout_height="60dp">
 
             <RelativeLayout
@@ -26,7 +27,9 @@
                     android:layout_height="wrap_content"
                     android:textAllCaps="true"
                     android:drawableLeft="@drawable/ic_search"
-                    android:hint="Search"
+                    android:hint="Search Here"
+                    android:textColor="@color/colorAccent"
+                    android:textColorHint="#ffff"
                     android:gravity="center"
                     android:layout_centerVertical="true"/>
 

@@ -4,21 +4,17 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
-
-import com.opentok.android.AudioDeviceManager;
 import com.opentok.android.Session;
-
-import android.os.Vibrator;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -31,6 +27,9 @@ import com.opentok.android.Publisher;
 import com.opentok.android.PublisherKit;
 import com.opentok.android.Stream;
 import com.opentok.android.Subscriber;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -57,29 +56,21 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
     private Subscriber mSubscriber;
 
     private AudioManager audioManager;
-
-    private ImageButton muteButton,videoOffButton;
-
-    private String receiverUserImage="";
-    private String senderUserImage="";
     private ImageView micOn,micOff,cameraOn,cameraOff;
 
-
+    private ProgressBar progressBar;
+    private Timer timer;
+    int count=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_chat);
 
-        final Vibrator vibrator = (Vibrator) VideoChatActivity.this.getSystemService(Context.VIBRATOR_SERVICE);//initializing vibrator
-
         userID= FirebaseAuth.getInstance().getCurrentUser().getUid();
         usersRef = FirebaseDatabase.getInstance().getReference().child("User");
 
         closeVideoChatBtn = findViewById(R.id.close_video_chat_btn);
-        muteButton = findViewById(R.id.mute_btn);
-        audioManager = (AudioManager)getSystemService(AUDIO_SERVICE);
-        videoOffButton = (ImageButton) findViewById(R.id.video_off_btn);
 
         micOn = findViewById(R.id.mic_on);
         micOff=findViewById(R.id.mic_off);
@@ -89,14 +80,13 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
 
         audioManager = (AudioManager)getSystemService(AUDIO_SERVICE);
 
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        timer = new Timer();
 
         closeVideoChatBtn.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v) {
-
-                vibrator.vibrate(100);
-
                 usersRef.addValueEventListener(new ValueEventListener()
                 {
                     @Override
@@ -161,21 +151,6 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
 
         requestPermissions();
 
-
-        muteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setMicroPhoneMute();
-                vibrator.vibrate(80);
-            }
-        });
-
-        videoOffButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                turnOffVideo();
-                vibrator.vibrate(80);
-
         micOn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -205,7 +180,6 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
         });
     }
 
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
     {
@@ -217,7 +191,7 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
     @AfterPermissionGranted(RC_VIDEO_APP_PERM)    // to request permission for camera and audio
     private void requestPermissions()
     {
-        String[] perms = {Manifest.permission.INTERNET , Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO,Manifest.permission.VIBRATE};
+        String[] perms = {Manifest.permission.INTERNET , Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO};
 
         if(EasyPermissions.hasPermissions(this,perms))
         {
@@ -292,6 +266,17 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
 
         mPublisherViewController.addView(mPublisher.getView());  //to get and display publisher video
 
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                count++;
+                progressBar.setProgress(count);
+                if(count==100)
+                    timer.cancel();
+            }
+        };
+        timer.schedule(timerTask,0,100);
+
         if(mPublisher.getView() instanceof GLSurfaceView)
         {
             ((GLSurfaceView) mPublisher.getView()).setZOrderOnTop(true);
@@ -311,6 +296,9 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
     @Override
     public void onStreamReceived(com.opentok.android.Session session, Stream stream) {
         Log.i(LOG_TAG,"Stream Received");
+
+        count=0;
+        progressBar.setVisibility(View.GONE);
 
         if(mSubscriber == null)
         {
@@ -347,7 +335,7 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
             micOff.setVisibility(View.GONE);
         }
         else
-            {
+        {
             audioManager.setMicrophoneMute(true);
             micOn.setVisibility(View.GONE);
             micOff.setVisibility(View.VISIBLE);
