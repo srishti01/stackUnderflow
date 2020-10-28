@@ -1,6 +1,8 @@
 package com.example.stackunderflow;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -43,9 +45,9 @@ public class ProfileActivity extends AppCompatActivity {
         friendRequestRef = FirebaseDatabase.getInstance().getReference().child("Friend Requests");   //friend request ref stores the reference to friend requests
         contactsRef = FirebaseDatabase.getInstance().getReference().child("Contacts");   //contacts is storing the reference to already added friends
 
-        receiverUserID = getIntent().getExtras().get("visit_user_id").toString();  //visit_user_id reference is accessed in receiverUserID
-        receiverUserImage = getIntent().getExtras().get("profile_image").toString(); //access image of the reference
-        receiverUserName = getIntent().getExtras().get("profile_name").toString();  //access name of the reference
+        receiverUserID = getIntent().getStringExtra("visit_user_id");  //visit_user_id reference is accessed in receiverUserID
+        receiverUserImage = getIntent().getStringExtra("profile_image"); //access image of the reference
+        receiverUserName = getIntent().getStringExtra("profile_name");  //access name of the reference
 
         background_profile_view=findViewById(R.id.background_profile_view);
         name_profile=findViewById(R.id.name_profile);
@@ -56,6 +58,8 @@ public class ProfileActivity extends AppCompatActivity {
         name_profile.setText(receiverUserName);  //name_profile textbox text is being set to the username
 
         manageClickEvents() ;     //after the results of search are displayed and a profile has been clicked upon,this method is called
+
+        final Vibrator vibrator = (Vibrator) ProfileActivity.this.getSystemService(Context.VIBRATOR_SERVICE);//initializing vibrator
     }
 
     private void manageClickEvents() {
@@ -126,6 +130,9 @@ public class ProfileActivity extends AppCompatActivity {
             add_friend.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    final Vibrator vibrator = (Vibrator) ProfileActivity.this.getSystemService(Context.VIBRATOR_SERVICE);//initializing vibrator
+                    vibrator.vibrate(80);
+
                     if(currentState.equals("new"))
                     {
                         SendFriendRequest();       //only when currentstate is new ie no frnd request has been sent or recieved before,
@@ -142,6 +149,7 @@ public class ProfileActivity extends AppCompatActivity {
                     {
                         CancelFriendRequest();
                     }
+
                 }
             });
         }
