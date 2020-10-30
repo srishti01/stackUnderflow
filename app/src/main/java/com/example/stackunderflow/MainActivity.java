@@ -1,5 +1,6 @@
 package com.example.stackunderflow;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -26,6 +27,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -113,11 +115,29 @@ public class MainActivity extends AppCompatActivity {
 //                    break;
 //              }
                 case R.id.navigation_logout:{
-                    FirebaseAuth.getInstance().signOut();
+                    new AlertDialog.Builder(MainActivity.this)      //Alert Dialog when User wants to Log out
+                            .setTitle("Log Out")
+                            .setMessage("Are you Sure you want to Log Out?")
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.cancel();
+                                    FirebaseAuth.getInstance().signOut();
 
-                    Intent logoutIntent = new Intent(MainActivity.this,RegistrationActivity.class);
-                    startActivity(logoutIntent);
-                    finish();
+                                    Intent logoutIntent = new Intent(MainActivity.this,RegistrationActivity.class);
+                                    startActivity(logoutIntent);
+                                    finish();
+                                }
+                            })
+                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.cancel();
+                                }
+                            })
+                    ;
+
+
                     break;
                 }
             }
