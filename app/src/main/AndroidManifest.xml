@@ -12,7 +12,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".RegistrationActivity"/>
-        <activity android:name=".ChatsActivity"/>
         <activity android:name=".MessageActivity" />
         <activity android:name=".VideoChatActivity" />
         <activity android:name=".CallingActivity" />
