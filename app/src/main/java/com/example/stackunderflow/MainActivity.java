@@ -86,16 +86,15 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home: {
-                    //As we are originally in the main activity so the Intent will just Refresh the mainActivity
-                    Intent mainIntent = new Intent(MainActivity.this, MainActivity.class);
-                    startActivity(mainIntent);
-                    break;
+                    return true;
                 }
                 case R.id.navigation_dashboard: {
                     //Setting Intent to show what would happen when notification icon is pressed
                     Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
                     startActivity(settingsIntent);
-                    break;
+                    //MainActivity.this.OverridePendingTransition(0,0);
+                    //break;
+                    return false;
                 }
 //                case R.id.navigation_chats: {
 //                    //Setting Intent to show what would happen when notification icon is pressed
@@ -106,7 +105,9 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.navigation_notifications: {
                     Intent notificationIntent = new Intent(MainActivity.this, NotificationActivity.class);
                     startActivity(notificationIntent);
-                    break;
+                    //OverridePendingTransition(0,0);
+                    //break;
+                    return false;
                 }
 //              case R.id.navigation_logout:{
 //                    Intent logoutIntent = new Intent(MainActivity.this,RegistrationActivity.class);//Registration activity will be given by ss
@@ -136,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
                                     dialog.cancel();
                                 }
                             }).show();
-                    break;
+                    return false;
                 }
             }
             return true;

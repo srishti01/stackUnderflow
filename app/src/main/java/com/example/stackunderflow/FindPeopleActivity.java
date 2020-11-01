@@ -63,6 +63,7 @@ public class FindPeopleActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 str=searchET.getText().toString();
+                str.equalsIgnoreCase(str);
 
         FirebaseRecyclerOptions<Contacts> options=null;   //options is a local variable accessing the four details from database parameters in contacts activity
         if(str.equals(""))

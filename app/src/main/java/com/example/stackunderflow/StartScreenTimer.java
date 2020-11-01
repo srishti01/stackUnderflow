@@ -25,7 +25,7 @@ public class StartScreenTimer extends AppCompatActivity {
             }
         };
         Timer t = new Timer();
-        t.schedule(task, 2500);
+        t.schedule(task, 1500);
 
     }
 }

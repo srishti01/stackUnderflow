@@ -35,6 +35,7 @@ import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
 import static com.opentok.android.PublisherKit.*;
+import static com.opentok.otc.f.v;
 
 public class VideoChatActivity extends AppCompatActivity implements com.opentok.android.Session.SessionListener,
         PublisherListener {
@@ -56,7 +57,7 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
     private Subscriber mSubscriber;
 
     private AudioManager audioManager;
-    private ImageView micOn,micOff,cameraOn,cameraOff;
+    private ImageView micOn,micOff,cameraOn,cameraOff,flipCamera;
 
     private ProgressBar progressBar;
     private Timer timer;
@@ -69,40 +70,36 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_chat);
 
-        userID= FirebaseAuth.getInstance().getCurrentUser().getUid();
+        userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         usersRef = FirebaseDatabase.getInstance().getReference().child("User");
 
         closeVideoChatBtn = findViewById(R.id.close_video_chat_btn);
 
         micOn = findViewById(R.id.mic_on);
-        micOff=findViewById(R.id.mic_off);
+        micOff = findViewById(R.id.mic_off);
 
-        cameraOn=findViewById(R.id.camera_on);
-        cameraOff=findViewById(R.id.camera_off);
+        cameraOn = findViewById(R.id.camera_on);
+        cameraOff = findViewById(R.id.camera_off);
+        flipCamera = findViewById(R.id.flip_camera);
 
-        audioManager = (AudioManager)getSystemService(AUDIO_SERVICE);
+        audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         timer = new Timer();
 
-        closeVideoChatBtn.setOnClickListener(new View.OnClickListener()
-        {
+        closeVideoChatBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                usersRef.addValueEventListener(new ValueEventListener()
-                {
+                usersRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if(snapshot.child(userID).hasChild("Ringing"))
-                        {
+                        if (snapshot.child(userID).hasChild("Ringing")) {
                             usersRef.child(userID).child("Ringing").removeValue();
-                            if(mPublisher!=null)
-                            {
+                            if (mPublisher != null) {
                                 mSession.unpublish(mPublisher);
                                 mPublisher.destroy();
                             }
-                            if(mSubscriber!=null)
-                            {
+                            if (mSubscriber != null) {
                                 mSession.unsubscribe(mSubscriber);
                                 mSubscriber.destroy();
                             }
@@ -110,31 +107,24 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
                             finishAffinity();
 
                         }
-                        if(snapshot.child(userID).hasChild("Calling"))
-                        {
+                        if (snapshot.child(userID).hasChild("Calling")) {
                             usersRef.child(userID).child("Calling").removeValue();
-                            if(mPublisher!=null)
-                            {
+                            if (mPublisher != null) {
                                 mSession.unpublish(mPublisher);
                                 mPublisher.destroy();
                             }
-                            if(mSubscriber!=null)
-                            {
+                            if (mSubscriber != null) {
                                 mSubscriber.destroy();
                                 mSession.unsubscribe(mSubscriber);
                             }
                             startActivity(new Intent(VideoChatActivity.this, RegistrationActivity.class));
                             finishAffinity();
-                        }
-                        else
-                        {
-                            if(mPublisher!=null)
-                            {
+                        } else {
+                            if (mPublisher != null) {
                                 mSession.unpublish(mPublisher);
                                 mPublisher.destroy();
                             }
-                            if(mSubscriber!=null)
-                            {
+                            if (mSubscriber != null) {
                                 mSession.unsubscribe(mSubscriber);
                                 mSubscriber.destroy();
                             }
@@ -178,6 +168,13 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
             @Override
             public void onClick(View v) {
                 setCameraOn();
+            }
+        });
+
+        flipCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switchCamera();
             }
         });
 
@@ -357,5 +354,9 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
         mPublisher.setPublishVideo(true);
         cameraOn.setVisibility(View.VISIBLE);
         cameraOff.setVisibility(View.GONE);
+    }
+    public void switchCamera()
+    {
+        mPublisher.cycleCamera();
     }
 }
