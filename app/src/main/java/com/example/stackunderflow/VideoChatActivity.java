@@ -104,8 +104,8 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
                                 mSession.unsubscribe(mSubscriber);
                                 mSubscriber.destroy();
                             }
-                            startActivity(new Intent(VideoChatActivity.this, RegistrationActivity.class));
-                            finish();
+//                            startActivity(new Intent(VideoChatActivity.this, RegistrationActivity.class));
+//                            finish();
 
                         }
                         if(snapshot.child(userID).hasChild("Calling"))
@@ -121,8 +121,8 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
                                 mSubscriber.destroy();
                                 mSession.unsubscribe(mSubscriber);
                             }
-                            startActivity(new Intent(VideoChatActivity.this, RegistrationActivity.class));
-                            finish();
+//                            startActivity(new Intent(VideoChatActivity.this, RegistrationActivity.class));
+//                            finish();
                         }
                         else
                         {
@@ -136,9 +136,11 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
                                 mSession.unsubscribe(mSubscriber);
                                 mSubscriber.destroy();
                             }
-                            startActivity(new Intent(VideoChatActivity.this, RegistrationActivity.class));
-                            finish();
+//                            startActivity(new Intent(VideoChatActivity.this, RegistrationActivity.class));
+//                            finish();
                         }
+                        startActivity(new Intent(VideoChatActivity.this, RegistrationActivity.class));
+                       finishAffinity();
                     }
 
                     @Override

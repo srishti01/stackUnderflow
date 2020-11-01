@@ -90,28 +90,50 @@ public class ProfileActivity extends AppCompatActivity {
                             }
                         });
                     }
-                    else
-                    {
-                        contactsRef.child(senderUserId).addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                if(snapshot.hasChild(receiverUserID))
-                                {
-                                    currentState = "friends";    //senderuserid's database already contains recieverid then currentstate is friends
-                                    add_friend.setText("Delete Contact");
-                                }
-                                else
-                                {
-                                    currentState = "new";
-                                }
-                            }
+//                    else
+//                    {
+//                        contactsRef.child(senderUserId).addListenerForSingleValueEvent(new ValueEventListener() {
+//                            @Override
+//                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                                if(snapshot.hasChild(receiverUserID))
+//                                {
+//                                    currentState = "friends";    //senderuserid's database already contains recieverid then currentstate is friends
+//                                    add_friend.setText("Delete Contact");
+//                                }
+//                                else
+//                                {
+//                                    currentState = "new";
+//                                    add_friend.setText("Add Friend");
+//                                }
+//                            }
+//
+//                            @Override
+//                            public void onCancelled(@NonNull DatabaseError error) {
+//
+//                            }
+//                        });
+//                    }
+                }
+            }
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
 
-                            }
-                        });
-                    }
+            }
+        });
+
+        contactsRef.child(senderUserId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.hasChild(receiverUserID))
+                {
+                    currentState = "friends";    //senderuserid's database already contains recieverid then currentstate is friends
+                    add_friend.setText("Delete Contact");
+                }
+                else
+                {
+                    currentState = "new";
+                    add_friend.setText("Add Friend");
                 }
             }
 
@@ -137,9 +159,9 @@ public class ProfileActivity extends AppCompatActivity {
                     {
                         SendFriendRequest();       //only when currentstate is new ie no frnd request has been sent or recieved before,
                     }                             //then this method invokes
-                    if(currentState.equals("request_Sent"))
+                    if(currentState.equals("friends"))
                     {
-                        CancelFriendRequest();  //request is already sent this method deletes the frnd request current user has sent
+                        DeleteFriendRequest(); //request is already sent this method deletes the frnd request current user has sent
                     }
                     if(currentState.equals("request_received"))
                     {
@@ -153,6 +175,35 @@ public class ProfileActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    private void DeleteFriendRequest() {
+        contactsRef.child(senderUserId).child(receiverUserID).child("Contact").removeValue()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful())
+                        {
+                            contactsRef.child(senderUserId).child(receiverUserID).child("Contact").removeValue();
+                            contactsRef.child(receiverUserID).child(senderUserId).child("Contact").removeValue();
+                            add_friend.setText("Add Friend");
+                            currentState = "new";
+                        }
+                    }
+                });
+        contactsRef.child(receiverUserID).child(senderUserId).child("Contact").removeValue()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful())
+                        {
+                            contactsRef.child(senderUserId).child(receiverUserID).child("Contact").removeValue();
+                            contactsRef.child(receiverUserID).child(senderUserId).child("Contact").removeValue();
+                            add_friend.setText("Add Friend");
+                            currentState = "new";
+                        }
+                    }
+                });
     }
 
     private void AcceptFriendRequest() {
@@ -196,7 +247,21 @@ public class ProfileActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<Void> task) {
                         if(task.isSuccessful())
                         {
-                            friendRequestRef.child(receiverUserID).child(senderUserId).removeValue();   //remove the frnd rqst for the reciever as well
+                            friendRequestRef.child(senderUserId).child(receiverUserID).removeValue();//remove the frnd rqst for the reciever as well
+                            friendRequestRef.child(receiverUserID).child(senderUserId).removeValue();
+                            add_friend.setText("Add Friend");    //after deletion the user can again send frnd request
+                            currentState="new";             //currentstate is set new for next time
+                        }
+                    }
+                });
+        friendRequestRef.child(receiverUserID).child(senderUserId).removeValue()      //removing the vaalue receiverid from frndrequests section os the sender
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful())
+                        {
+                            friendRequestRef.child(receiverUserID).child(senderUserId).removeValue();//remove the frnd rqst for the reciever as well
+                            friendRequestRef.child(senderUserId).child(receiverUserID).removeValue();
                             add_friend.setText("Add Friend");    //after deletion the user can again send frnd request
                             currentState="new";             //currentstate is set new for next time
                         }

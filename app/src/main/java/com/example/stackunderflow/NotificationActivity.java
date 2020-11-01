@@ -136,6 +136,8 @@ public class NotificationActivity extends AppCompatActivity {
                                                                                                     public void onComplete(@NonNull Task<Void> task) {
                                                                                                         if(task.isSuccessful())
                                                                                                         {
+                                                                                                            friendRequestRef.child(currentUserID).child(listUserID).removeValue();
+                                                                                                            friendRequestRef.child(listUserID).child(currentUserID).removeValue();
                                                                                                             Toast.makeText(NotificationActivity.this,"Contact saved.",Toast.LENGTH_SHORT).show();
                                                                                                         }
                                                                                                     }
@@ -161,6 +163,8 @@ public class NotificationActivity extends AppCompatActivity {
                                                     public void onComplete(@NonNull Task<Void> task) {
                                                         if(task.isSuccessful())
                                                         {
+                                                            friendRequestRef.child(currentUserID).child(listUserID).removeValue();
+                                                            friendRequestRef.child(listUserID).child(currentUserID).removeValue();
                                                             Toast.makeText(NotificationActivity.this,"Friend request cancelled.",Toast.LENGTH_SHORT).show();
                                                         }
                                                     }
