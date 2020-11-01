@@ -80,6 +80,7 @@ public class CallingActivity extends AppCompatActivity {
                         {
                             Intent intent=new Intent(CallingActivity.this,VideoChatActivity.class);
                             startActivity(intent);
+                            finishAffinity();
                         }
                     }
                 });
@@ -185,6 +186,7 @@ public class CallingActivity extends AppCompatActivity {
 
                     Intent intent=new Intent(CallingActivity.this,VideoChatActivity.class);
                     startActivity(intent);
+                    finishAffinity();
                 }
 
             }
@@ -228,7 +230,7 @@ public class CallingActivity extends AppCompatActivity {
                                     {
                                         //when we remove it we send user to home
                                         startActivity(new Intent(CallingActivity.this,RegistrationActivity.class));
-                                        finish();
+                                        finishAffinity();
                                     }
                                 });
                             }
@@ -238,7 +240,7 @@ public class CallingActivity extends AppCompatActivity {
                 else //if the receiver cancels first we just send user to home
                 {
                     startActivity(new Intent(CallingActivity.this,RegistrationActivity.class));
-                    finish();
+                    finishAffinity();
                 }
 
             }
@@ -273,7 +275,7 @@ public class CallingActivity extends AppCompatActivity {
                                     {
                                         //when we remove it we send user to home
                                         startActivity(new Intent(CallingActivity.this,RegistrationActivity.class));
-                                        finish();
+                                        finishAffinity();
                                     }
                                 });
                             }
@@ -283,7 +285,7 @@ public class CallingActivity extends AppCompatActivity {
                 else //if the receiver cancels first we just send user to home
                 {
                     startActivity(new Intent(CallingActivity.this,RegistrationActivity.class));
-                    finish();
+                    finishAffinity();
                 }
 
             }

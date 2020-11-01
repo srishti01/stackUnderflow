@@ -62,6 +62,8 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
     private Timer timer;
     int count=0;
 
+    private ImageView screenShare, cancelScreenShare;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,7 +107,7 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
                                 mSubscriber.destroy();
                             }
                             startActivity(new Intent(VideoChatActivity.this, RegistrationActivity.class));
-                            finish();
+                            finishAffinity();
 
                         }
                         if(snapshot.child(userID).hasChild("Calling"))
@@ -122,7 +124,7 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
                                 mSession.unsubscribe(mSubscriber);
                             }
                             startActivity(new Intent(VideoChatActivity.this, RegistrationActivity.class));
-                            finish();
+                            finishAffinity();
                         }
                         else
                         {
@@ -137,7 +139,7 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
                                 mSubscriber.destroy();
                             }
                             startActivity(new Intent(VideoChatActivity.this, RegistrationActivity.class));
-                            finish();
+                            finishAffinity();
                         }
                     }
 
@@ -178,6 +180,7 @@ public class VideoChatActivity extends AppCompatActivity implements com.opentok.
                 setCameraOn();
             }
         });
+
     }
 
     @Override

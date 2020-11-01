@@ -10,4 +10,5 @@
     <color name="lightBlue">#02F7FF</color>
     <color name="darkBlue">#0066FF</color>
     <color name="msg_bg">#75787C</color>
+    <color name="publisher_border_color">#FFFFFF</color>
 </resources>

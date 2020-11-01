@@ -116,8 +116,9 @@ public class MainActivity extends AppCompatActivity {
 //              }
                 case R.id.navigation_logout:{
                     new AlertDialog.Builder(MainActivity.this)      //Alert Dialog when User wants to Log out
-                            .setTitle("Log Out")
+ //                           .setTitle("Log Out")
                             .setMessage("Are you Sure you want to Log Out?")
+                            .setCancelable(false)
                             .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -134,10 +135,7 @@ public class MainActivity extends AppCompatActivity {
                                 public void onClick(DialogInterface dialog, int which) {
                                     dialog.cancel();
                                 }
-                            })
-                    ;
-
-
+                            }).show();
                     break;
                 }
             }
