@@ -1,5 +1,6 @@
 package com.example.stackunderflow;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -26,6 +27,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -84,16 +86,15 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home: {
-                    //As we are originally in the main activity so the Intent will just Refresh the mainActivity
-                    Intent mainIntent = new Intent(MainActivity.this, MainActivity.class);
-                    startActivity(mainIntent);
-                    break;
+                    return true;
                 }
                 case R.id.navigation_dashboard: {
                     //Setting Intent to show what would happen when notification icon is pressed
                     Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
                     startActivity(settingsIntent);
-                    break;
+                    //MainActivity.this.OverridePendingTransition(0,0);
+                    //break;
+                    return false;
                 }
 //                case R.id.navigation_chats: {
 //                    //Setting Intent to show what would happen when notification icon is pressed
@@ -104,7 +105,9 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.navigation_notifications: {
                     Intent notificationIntent = new Intent(MainActivity.this, NotificationActivity.class);
                     startActivity(notificationIntent);
-                    break;
+                    //OverridePendingTransition(0,0);
+                    //break;
+                    return false;
                 }
 //              case R.id.navigation_logout:{
 //                    Intent logoutIntent = new Intent(MainActivity.this,RegistrationActivity.class);//Registration activity will be given by ss
@@ -113,12 +116,28 @@ public class MainActivity extends AppCompatActivity {
 //                    break;
 //              }
                 case R.id.navigation_logout:{
-                    FirebaseAuth.getInstance().signOut();
+                    new AlertDialog.Builder(MainActivity.this)      //Alert Dialog when User wants to Log out
+ //                           .setTitle("Log Out")
+                            .setMessage("Are you Sure you want to Log Out?")
+                            .setCancelable(false)
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.cancel();
+                                    FirebaseAuth.getInstance().signOut();
 
-                    Intent logoutIntent = new Intent(MainActivity.this,RegistrationActivity.class);
-                    startActivity(logoutIntent);
-                    finish();
-                    break;
+                                    Intent logoutIntent = new Intent(MainActivity.this,RegistrationActivity.class);
+                                    startActivity(logoutIntent);
+                                    finish();
+                                }
+                            })
+                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.cancel();
+                                }
+                            }).show();
+                    return false;
                 }
             }
             return true;

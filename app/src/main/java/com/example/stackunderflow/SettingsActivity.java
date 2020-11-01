@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,6 +27,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.Constants;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -62,6 +64,7 @@ public class SettingsActivity extends AppCompatActivity {
         mUsername = findViewById(R.id.username_settings);
         mBio = findViewById(R.id.bio_settings);
         progressDialog = new ProgressDialog(this);
+        userRef=FirebaseDatabase.getInstance().getReference().child("User");
 
         final Vibrator vibrator = (Vibrator) SettingsActivity.this.getSystemService(Context.VIBRATOR_SERVICE);//initializing vibrator
 
@@ -71,7 +74,7 @@ public class SettingsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent galleryIntent = new Intent();
                 galleryIntent.setAction(Intent.ACTION_GET_CONTENT);//this action is what will open the gallery
-                galleryIntent.setType("image/*");//here we are mentioning that we want to see only images(/* for all images)
+                galleryIntent.setType("image/");//here we are mentioning that we want to see only images(/ for all images)
                 startActivityForResult(galleryIntent, galleryPick);
             }
         });
@@ -126,68 +129,159 @@ public class SettingsActivity extends AppCompatActivity {
 
                 }
             });
-        } else if (getUserName.isEmpty()) {    //if user lefts the name BLANK
-            Toast.makeText(SettingsActivity.this, "userName is mandatory", Toast.LENGTH_SHORT).show();
-        } else if (getUserBio.isEmpty()) {      //if user lefts the bio BLANK
-            Toast.makeText(SettingsActivity.this, "Bio is mandatory", Toast.LENGTH_SHORT).show();
-        } else {
-            progressDialog.setTitle("Profile");
-            progressDialog.setMessage("Please Wait...");
-            progressDialog.show();
-
-            //Here we have to save the user DP,name,bio in the firebase database
-            final StorageReference filePath = userProfileImgRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-            final UploadTask uploadTask = filePath.putFile(imageUri);
-
-            //we have stored the image in the FirebaseStorage
-            //Now we have to show the image in the RealTime Database
-            uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-                @Override
-                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-
-                    if (!task.isSuccessful()) {
-                        throw task.getException();
-                    }
-
-                    //Now we have to get the Url of the image we put inside the Firebase storage
-                    downloadUrl = filePath.getDownloadUrl().toString();
-                    return filePath.getDownloadUrl();//we had to return task<Uri>
-                }
-            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                @Override
-                public void onComplete(@NonNull Task<Uri> task) {
-                    if (task.isSuccessful()) {
-                        downloadUrl = task.getResult().toString();
-
-                        //As We can put any kind of object into the RealTime Database, we will create a hash map
-                        HashMap<String, Object> profileMap = new HashMap<>();
-                        profileMap.put("UID", FirebaseAuth.getInstance().getCurrentUser().getUid());
-                        profileMap.put("Name", getUserName);
-                        profileMap.put("Bio", getUserBio);
-                        profileMap.put("image", downloadUrl);
-
-                        userRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                .updateChildren(profileMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    //Now if the setting up of name,dp,bio was successful
-                                    //we will send the user to the homepage
-                                   Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
-                                   startActivity(intent);
-                                    finish();
-                                    progressDialog.dismiss();
-
-                                    Toast.makeText(SettingsActivity.this, "Profile Updated", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Snackbar.make(null, "Something went wrong", Snackbar.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
-                    }
-                }
-            });
         }
+
+//        else if (getUserBio.isEmpty()) {      //if user lefts the bio BLANK
+//            Toast.makeText(SettingsActivity.this, "Bio is mandatory", Toast.LENGTH_SHORT).show();
+//        }
+
+        else if (getUserName.isEmpty()) {    //if user lefts the name BLANK
+            Toast.makeText(SettingsActivity.this, "userName is mandatory", Toast.LENGTH_SHORT).show();
+        }
+
+        else if(!getUserName.isEmpty()) {
+            userRef.child("User").orderByChild("Name").equalTo(getUserName).addValueEventListener(
+                    new ValueEventListener() {
+
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+
+                            if (dataSnapshot.exists()) {
+
+                                // User Exists
+                                // Do your stuff here if user already exists
+                                Toast.makeText(getApplicationContext(), "Username already exists. Please try other username.", Toast.LENGTH_SHORT).show();
+
+                            }
+                            else{
+                                progressDialog.setTitle("Profile");
+                                progressDialog.setMessage("Please Wait...");
+                                progressDialog.show();
+
+                                //Here we have to save the user DP,name,bio in the firebase database
+                                final StorageReference filePath = userProfileImgRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                                final UploadTask uploadTask = filePath.putFile(imageUri);
+
+                                //we have stored the image in the FirebaseStorage
+                                //Now we have to show the image in the RealTime Database
+                                uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                                    @Override
+                                    public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+
+                                        if (!task.isSuccessful()) {
+                                            throw task.getException();
+                                        }
+
+                                        //Now we have to get the Url of the image we put inside the Firebase storage
+                                        downloadUrl = filePath.getDownloadUrl().toString();
+                                        return filePath.getDownloadUrl();//we had to return task<Uri>
+                                    }
+                                }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Uri> task) {
+                                        if (task.isSuccessful()) {
+                                            downloadUrl = task.getResult().toString();
+
+                                            //As We can put any kind of object into the RealTime Database, we will create a hash map
+                                            HashMap<String, Object> profileMap = new HashMap<>();
+                                            profileMap.put("UID", FirebaseAuth.getInstance().getCurrentUser().getUid());
+                                            profileMap.put("Name", getUserName);
+                                            profileMap.put("Bio", getUserBio);
+                                            profileMap.put("image", downloadUrl);
+
+                                            userRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                                    .updateChildren(profileMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    if (task.isSuccessful()) {
+                                                        //Now if the setting up of name,dp,bio was successful
+                                                        //we will send the user to the homepage
+                                                        Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
+                                                        startActivity(intent);
+                                                        finish();
+                                                        progressDialog.dismiss();
+
+                                                        Toast.makeText(SettingsActivity.this, "Profile Updated", Toast.LENGTH_SHORT).show();
+                                                    } else {
+                                                        Snackbar.make(null, "Something went wrong", Snackbar.LENGTH_SHORT).show();
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                        @Override
+                        public void onCancelled (DatabaseError databaseError){
+
+                        }
+                    }
+
+            );
+        }
+
+//        else if (getUserBio.isEmpty()) {      //if user lefts the bio BLANK
+//            Toast.makeText(SettingsActivity.this, "Bio is mandatory", Toast.LENGTH_SHORT).show();
+//        }
+//        else {
+//            progressDialog.setTitle("Profile");
+//            progressDialog.setMessage("Please Wait...");
+//            progressDialog.show();
+//
+//            //Here we have to save the user DP,name,bio in the firebase database
+//            final StorageReference filePath = userProfileImgRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+//            final UploadTask uploadTask = filePath.putFile(imageUri);
+//
+//            //we have stored the image in the FirebaseStorage
+//            //Now we have to show the image in the RealTime Database
+//            uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+//                @Override
+//                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+//
+//                    if (!task.isSuccessful()) {
+//                        throw task.getException();
+//                    }
+//
+//                    //Now we have to get the Url of the image we put inside the Firebase storage
+//                    downloadUrl = filePath.getDownloadUrl().toString();
+//                    return filePath.getDownloadUrl();//we had to return task<Uri>
+//                }
+//            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+//                @Override
+//                public void onComplete(@NonNull Task<Uri> task) {
+//                    if (task.isSuccessful()) {
+//                        downloadUrl = task.getResult().toString();
+//
+//                        //As We can put any kind of object into the RealTime Database, we will create a hash map
+//                        HashMap<String, Object> profileMap = new HashMap<>();
+//                        profileMap.put("UID", FirebaseAuth.getInstance().getCurrentUser().getUid());
+//                        profileMap.put("Name", getUserName);
+//                        profileMap.put("Bio", getUserBio);
+//                        profileMap.put("image", downloadUrl);
+//
+//                        userRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+//                                .updateChildren(profileMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+//                            @Override
+//                            public void onComplete(@NonNull Task<Void> task) {
+//                                if (task.isSuccessful()) {
+//                                    //Now if the setting up of name,dp,bio was successful
+//                                    //we will send the user to the homepage
+//                                   Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
+//                                   startActivity(intent);
+//                                    finish();
+//                                    progressDialog.dismiss();
+//
+//                                    Toast.makeText(SettingsActivity.this, "Profile Updated", Toast.LENGTH_SHORT).show();
+//                                } else {
+//                                    Snackbar.make(null, "Something went wrong", Snackbar.LENGTH_SHORT).show();
+//                                }
+//                            }
+//                        });
+//                    }
+//                }
+//            });
+//        }
     }
 
     private void saveInfoOnly() {//when user only changes name or bio and doesn't change the old dp
@@ -196,7 +290,7 @@ public class SettingsActivity extends AppCompatActivity {
 
 
 
-            if (getUserName.isEmpty()) {    //if user lefts the name BLANK
+        if (getUserName.isEmpty()) {    //if user lefts the name BLANK
             Toast.makeText(SettingsActivity.this, "userName is mandatory", Toast.LENGTH_SHORT).show();
         } else if (getUserBio.isEmpty()) {      //if user lefts the bio BLANK
             Toast.makeText(SettingsActivity.this, "Bio is mandatory", Toast.LENGTH_SHORT).show();
@@ -220,7 +314,7 @@ public class SettingsActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         //Now if the setting up of name,dp,bio was successful
                         //we will send the user to the homepage
-                       Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
+                        Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
                         startActivity(intent);
                         finish();
                         progressDialog.dismiss();
@@ -247,7 +341,7 @@ public class SettingsActivity extends AppCompatActivity {
                             mUsername.setText(nameFromDb);;
                             mBio.setText(bioFromDb);
                             Picasso.get().load(imageFromDb).placeholder(R.drawable.profile_image).into(mProfileImage);
-                                  //getting the imageUrl           //The place to put image       //Object of the place
+                            //getting the imageUrl           //The place to put image       //Object of the place
                         }
                     }
 

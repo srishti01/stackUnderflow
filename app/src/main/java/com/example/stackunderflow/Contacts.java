@@ -1,17 +1,18 @@
 package com.example.stackunderflow;
 
 public class Contacts {
-    String name,image,status,uid;
+    String name,image,status,uid,state;
 
     public Contacts() {
 
     }
 
-    public Contacts(String name, String image, String status, String uid) {
+    public Contacts(String name, String image, String status, String uid, String state) {
         this.name = name;
         this.image = image;
         this.status = status;
         this.uid = uid;
+        this.state = state;
     }
 
     public String getName() {
@@ -44,5 +45,13 @@ public class Contacts {
 
     public void setUid(String uid) {
         this.uid = uid;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 }

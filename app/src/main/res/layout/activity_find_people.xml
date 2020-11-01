@@ -26,12 +26,25 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textAllCaps="true"
-                    android:drawableLeft="@drawable/ic_search"
                     android:hint="Search Here"
                     android:textColor="@color/colorAccent"
                     android:textColorHint="#ffff"
                     android:gravity="center"
                     android:layout_centerVertical="true"/>
+
+                <ImageButton
+                    android:id="@+id/search_cmd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginStart="332dp"
+                    android:layout_marginLeft="332dp"
+                    android:layout_marginEnd="0dp"
+                    android:layout_marginRight="0dp"
+                    android:src="@drawable/ic_search" />
 
 
             </RelativeLayout>

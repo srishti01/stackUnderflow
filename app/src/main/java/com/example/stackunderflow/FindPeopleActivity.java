@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -37,16 +38,17 @@ public class FindPeopleActivity extends AppCompatActivity {
     private RecyclerView findPeopleList;
 
     private EditText searchET;
-    private String str="";
+    public String str="";
     private DatabaseReference usersRef;
 
     private String userName, profileImage ;
+
+    private ImageButton search_cmd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_people);
-
 
         searchET = findViewById(R.id.search_user_text);         //receives the name to search
         findPeopleList = findViewById(R.id.find_people_list);
@@ -54,34 +56,14 @@ public class FindPeopleActivity extends AppCompatActivity {
 
         usersRef = FirebaseDatabase.getInstance().getReference().child("User");
 
-        searchET.addTextChangedListener(new TextWatcher() {        //inbuilt method to access and implement functions when text is added in searchbar
+        search_cmd = findViewById(R.id.search_cmd);
+
+        search_cmd.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            public void onClick(View v) {
 
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(searchET.getText().toString().equals(""))     //when search bar is left empty
-                    Toast.makeText(FindPeopleActivity.this, "Please write a name to search",Toast.LENGTH_SHORT).show();
-                else
-                {
-                    str=s.toString();   //the text to be searched is stored in str
-                    onStart();
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
+                str=searchET.getText().toString();
+                str.equalsIgnoreCase(str);
 
         FirebaseRecyclerOptions<Contacts> options=null;   //options is a local variable accessing the four details from database parameters in contacts activity
         if(str.equals(""))
@@ -169,6 +151,8 @@ public class FindPeopleActivity extends AppCompatActivity {
 
         findPeopleList.setAdapter(firebaseRecyclerAdapter);
         firebaseRecyclerAdapter.startListening(); //this will enable displaying the suggested users whenever we change text in searchbar
+    }
+        });
     }
 
     public static class FindFriendsViewHolder extends RecyclerView.ViewHolder

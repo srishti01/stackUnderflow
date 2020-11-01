@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimaryDark">#4F07EF</color>
+    <color name="colorPrimaryDark">#414949</color>
     <color name="colorAccent">#D6C7D1</color>
     <color name="color4">#60448E</color>
     <color name="color5">#5B298C</color>
@@ -10,4 +10,5 @@
     <color name="lightBlue">#02F7FF</color>
     <color name="darkBlue">#0066FF</color>
     <color name="msg_bg">#75787C</color>
+    <color name="publisher_border_color">#FFFFFF</color>
 </resources>
